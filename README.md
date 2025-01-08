@@ -1,7 +1,7 @@
 <div align="center">
-  <img src="./icon.png?height=150&width=150" alt="Blooms Logo" width="150" height="150">
-  <h1>✨ Blooms ✨</h1>
-  <p>An  open-source alternative to LemonSqueezy and Paddle</p>
+  <img src="./icon.png?height=150&width=150" alt="Circut AI Logo" width="150" height="150">
+  <h1>✨ Circut AI ✨</h1>
+  <p>Build intelligent AI products effortlessly with an open-source, serverless framework.</p>
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
   [![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue)](https://www.typescriptlang.org/)
@@ -13,98 +13,38 @@
 
 ## 🌟 Introduction
 
-Blooms is an open-source e-commerce platform designed to empower developers and businesses with a heavenly alternative to LemonSqueezy and Paddle. Our mission is to provide a feature-rich, customizable, and scalable solution for digital product sales, subscriptions, and license management.
+Circut AI is a powerful, open-source platform designed to help developers build intelligent, dynamic AI agents with customizable configurations. Whether you're building a summarizer, a customer support bot, or a complex automation system, Circut provides all the tools you need to get started.
 
 ## 🚀 Key Features
 
-- 🛒 Digital product sales
-- 💳 Subscription management
-- 🔑 License key generation and validation
-- 📊 Analytics and reporting
-- 🌐 Multi-currency support
-- 🔒 Secure payment processing
-- 🎨 Customizable checkout experiences
-- 🔗 API for seamless integrations
-- 📱 Mobile-responsive design
+- 🧠 Build intelligent AI agents
+- ⚙️ Customizable configurations
+- 🔑 API keys for secure integrations
+- 📝 Define memory and tools for agents
+- 🔄 Real-time data streaming
+- 🛠️ Parallel tool calls for efficiency
+- 🔮 Dynamic agent variables and memory
+- 🔐 Secure and scalable cloud integration
+- 🌐 Easy-to-use API for seamless integrations
 
 ## 🛠️ Tech Stack
 
-Blooms is built with a combination of modern technologies:
+Circut AI is built using the latest technologies:
 
 - **Frontend**: Next.js, Tailwind CSS
 - **Backend**: Hono.js
 - **Database**: PostgreSQL
 - **ORM**: Prisma
 - **Authentication**: Clerk
-- **Payment Processing**: Stripe
+- **API Integration**: OpenAI, Custom Tools
 - **Deployment**: Vercel
 - **CI/CD**: GitHub Actions
 
 ## 🌈 Installation
 
-To set up your own instance of Blooms, follow these steps:
+To set up your own instance of Circut AI, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/im-Kazmi/Blooms-
-   cd
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Set up environment variables:
-   ```bash
-   cp .env.example .env.local
-   ```
-   Edit `.env.local` with your configuration details.
-
-4. Set up the database:
-   ```bash
-   npx prisma migrate dev
-   ```
-
-5. Run the development server:
-   ```bash
-   npm run dev
-   ```
-
-6. Open [http://localhost:3000](http://localhost:3000) in your browser to see the magic!
-
-## 🌟 Usage
-
-Here's a glimpse of how to use Blooms in your project:
-
-SDK is not built yet nor the app but will be used like the following. it is just an example
-```typescript
-import { Blooms } from 'celestialcommerce';
-
-const cc = new Blooms({
-  apiKey: 'your_api_key',
-  // other configuration options
-});
-
-// Create a new product
-const product = await cc.products.create({
-  name: 'Stardust Software',
-  price: 29.99,
-  currency: 'USD',
-});
-
-// Generate a license key
-const license = await cc.licenses.generate(product.id);
-
-console.log(`New license key: \${license.key}`);
-```
-
-## 📜 License
-
-Blooms is open-source software licensed under the MIT license. See the [LICENSE](LICENSE) file for more details.
-
----
-
-<div align="center">
-  <p>Crafted with ❤️ by the kazmi (for now) </p>
-</div>
+   git clone https://github.com/your-username/CircutAI
+   cd CircutAI
