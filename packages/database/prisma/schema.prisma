@@ -1,0 +1,139 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
+}
+
+enum AccountStatus {
+  CREATED
+  ONBOARDING_STARTED
+  UNDER_REVIEW
+  ACTIVE
+}
+
+model User {
+  clerkId         String        @id
+  name            String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  email           String        @unique
+  avatarUrl       String?
+  blockedAt       DateTime?
+  meta            Json          @default("{}")
+  profileSettings Json          @default("{}")
+  featureSettings Json          @default("{}")
+  Organization    Organization? @relation(fields: [organizationId], references: [id])
+  organizationId  String?
+}
+
+model Organization {
+  id                      String   @id @default(cuid())
+  name                    String
+  imgUrl                  String?
+  slug                    String?
+  membersCount            Int
+  pendingInvitationsCount Int
+  adminDeleteEnabled      Boolean
+  maxAllowedMemberships   Int
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  publicMetadata          Json     @default("{}")
+
+  users   User[]
+  agents  Agent[]
+  apiKeys APIKey[]
+}
+
+model Agent {
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id])
+  config      Json? // Store dynamic agent configurations like apiKey, model, temperature
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  tools            AgentTool[]
+  memory           Memory[]
+  workflows        Workflow[]
+  ExecutionHistory ExecutionHistory[]
+}
+
+model Memory {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  agentId     String
+  agent       Agent         @relation(fields: [agentId], references: [id])
+  vectorData  Bytes // Stores the embedding vector (using `pgvector`)
+  content     String // Original text/content that generated the vector
+  metadata    Json // Additional info (e.g., tags, source, timestamps)
+  relevance   Float // Relevance score for vector-based retrieval
+  confidence  Float
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  memoryAudit MemoryAudit[] // History of changes to memory
+}
+
+model Tool {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  apiUrl      String
+  config      Json     @default("{}")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  AgentTool AgentTool[]
+}
+
+model AgentTool {
+  id      String @id @default(cuid())
+  agentId String
+  agent   Agent  @relation(fields: [agentId], references: [id])
+  toolId  String
+  tool    Tool   @relation(fields: [toolId], references: [id])
+}
+
+model Workflow {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  agentId     String
+  agent       Agent    @relation(fields: [agentId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model APIKey {
+  id        String       @id @default(cuid())
+  orgId     String
+  org       Organization @relation(fields: [orgId], references: [id])
+  key       String       @unique
+  createdAt DateTime     @default(now())
+  revokedAt DateTime?
+}
+
+model MemoryAudit {
+  id         String   @id @default(cuid())
+  memoryId   String
+  memory     Memory   @relation(fields: [memoryId], references: [id])
+  action     String // e.g., 'created', 'updated', 'deleted'
+  changeData Json
+  createdAt  DateTime @default(now())
+}
+
+model ExecutionHistory {
+  id          String   @id @default(cuid())
+  agentId     String
+  agent       Agent    @relation(fields: [agentId], references: [id])
+  executionId String // ID of the specific execution instance
+  input       Json // The input data passed to the agent
+  output      Json // The output data returned by the agent
+  createdAt   DateTime @default(now())
+}
