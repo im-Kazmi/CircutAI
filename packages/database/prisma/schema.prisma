@@ -60,6 +60,7 @@ model Organization {
   users   User[]
   circuts Circut[]
   apiKeys APIKey[]
+  Memory  Memory[]
 }
 
 model Circut {
@@ -84,7 +85,9 @@ model Memory {
   description String?
   circutId    String
   circut      Circut        @relation(fields: [circutId], references: [id])
-  vectorData  Bytes // Stores the embedding vector (using `pgvector`)
+  orgId       String
+  org         Organization  @relation(fields: [orgId], references: [id])
+  vectorData  Bytes
   content     String // Original text/content that generated the vector
   metadata    Json // Additional info (e.g., tags, source, timestamps)
   relevance   Float // Relevance score for vector-based retrieval

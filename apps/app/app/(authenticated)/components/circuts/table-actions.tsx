@@ -13,13 +13,13 @@ import { useConfirm } from "@repo/design-system/hooks/use-confirm";
 type Props = {
   id: string;
 };
-const ProductActions = ({ id }: Props) => {
+export const CircutActions = ({ id }: Props) => {
   // const { onOpen } = useOpenAccount();
   // const deleteMutation = useDeleteAccount(id);
 
   const [ConfirmationDialog, confirm] = useConfirm({
     title: "Are you sure! 🖐️",
-    message: "This will permanently delete this Product!",
+    message: "This will permanently delete this circut!",
   });
 
   const onDelete = async () => {
@@ -58,5 +58,3 @@ const ProductActions = ({ id }: Props) => {
     </>
   );
 };
-
-export default ProductActions;

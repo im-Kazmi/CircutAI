@@ -75,14 +75,14 @@ const app = new Hono()
 
     const products = await productService.listProducts({}, store.id);
     return c.json(products, 200);
-  })
-  .get("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
-    const { id } = c.req.valid("param");
-    const productService = c.var.productService;
-
-    const product = await productService.getProduct(id);
-    return c.json(product);
   });
+// .get("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
+//   const { id } = c.req.valid("param");
+//   const productService = c.var.productService;
+
+//   const product = await productService.getProduct(id);
+//   return c.json(product);
+// });
 // .post("/", zValidator("json", createProductSchema), async (c) => {
 //   const productService = c.get("productService");
 //   const storeService = c.get("storeService");

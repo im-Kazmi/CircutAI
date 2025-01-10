@@ -12,6 +12,7 @@ import { GlobalSidebar } from "../components/dashboard/sidebar";
 import { OnBoardingDialog } from "../components/dialogs/onboarding-dialog";
 import { useOrganization } from "@repo/auth/client";
 import { redirect } from "next/navigation";
+import { ShadowWrapper } from "../components/shadow-wrapper";
 type AppLayoutProperties = {
   readonly children: ReactNode;
 };
@@ -37,8 +38,8 @@ const AppLayout = ({ children }: AppLayoutProperties) => {
     <SidebarProvider>
       <GlobalSidebar>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0 bg-muted/50">
-          <div className="min-h-[100vh] bg-white/40 my-5 rounded-2xl flex-1  md:min-h-min p-5">
-            {children}
+          <div className="min-h-[100vh]  my-5 rounded-2xl flex-1  md:min-h-min p-5">
+            <ShadowWrapper>{children}</ShadowWrapper>
           </div>
         </div>
       </GlobalSidebar>
