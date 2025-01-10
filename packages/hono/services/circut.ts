@@ -1,11 +1,44 @@
 import { prisma, Prisma } from "@repo/database";
 import { BaseService } from "./base-service";
+import { PaginationParams, QueryUtils, SortingParams } from "@/utils/query";
 
 export class CircutService extends BaseService {
-  async createCircut(values: Prisma.CircutCreateInput) {
+  list(
+    params: PaginationParams & SortingParams<keyof Prisma.CircutSelect>,
+    orgId: string,
+  ) {
+    const { skip, take } = QueryUtils.getPaginationParams(params);
+    const orderBy = QueryUtils.getSortingParams(params);
+
+    const query = this.prisma.circut.findMany({
+      where: {
+        orgId,
+      },
+      include: {
+        memory: true,
+      },
+      skip,
+      take,
+      orderBy,
+    });
+
+    return QueryUtils.paginateQuery(query, this.prisma.circut, params);
+  }
+
+  async createCircut(
+    orgId: string,
+    values: Omit<Prisma.CircutCreateInput, "org">,
+  ) {
     try {
       const circut = await prisma.circut.create({
-        data: values,
+        data: {
+          ...values,
+          org: {
+            connect: {
+              id: orgId,
+            },
+          },
+        },
       });
 
       return circut;
@@ -14,10 +47,16 @@ export class CircutService extends BaseService {
     }
   }
 
-  async deleteCircut(id: string) {
+  async deleteCircut(orgId: string, id: string) {
     try {
+      const exists = await this.getCircutByIdandOrg(id, orgId);
+
+      if (!exists) {
+        throw new Error(`circut does not exists with this id.`);
+      }
+
       await prisma.circut.delete({
-        where: { id },
+        where: { id, orgId },
       });
       return { message: "circut deleted successfully" };
     } catch (error) {
@@ -25,21 +64,25 @@ export class CircutService extends BaseService {
     }
   }
 
-  async updateCircut(id: string, values: Prisma.CircutUpdateInput) {
+  async updateCircut(
+    id: string,
+    orgId: string,
+    values: Prisma.CircutUpdateInput,
+  ) {
     try {
-      const exists = await this.getCircutById(id);
+      const exists = await this.getCircutByIdandOrg(id, orgId);
 
       if (!exists) {
         throw new Error(`circut does not exists with this id.`);
       }
 
-      const updatedUser = await prisma.user.update({
-        where: { clerkId: id },
+      const updatedCircut = await prisma.circut.update({
+        where: { id, orgId },
         data: values,
       });
-      return updatedUser;
+      return updatedCircut;
     } catch (error) {
-      throw new Error(`Error updating user: ${(error as Error).message}`);
+      throw new Error(`Error updating circut: ${(error as Error).message}`);
     }
   }
 
@@ -52,6 +95,17 @@ export class CircutService extends BaseService {
       return user;
     } catch (error) {
       throw new Error(`Error retrieving user: ${(error as Error).message}`);
+    }
+  }
+  async getCircutByIdandOrg(id: string, orgId: string) {
+    try {
+      const circut = await prisma.circut.findUnique({
+        where: { id, orgId },
+      });
+
+      return circut;
+    } catch (error) {
+      throw new Error(`Error retrieving circut: ${(error as Error).message}`);
     }
   }
 }

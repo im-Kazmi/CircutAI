@@ -5,7 +5,7 @@ import { OrganizationProfile } from "@repo/auth/client";
 const Page = () => {
   return (
     <div className="">
-      <OrganizationProfile />
+      <OrganizationProfile routing="virtual" />
     </div>
   );
 };

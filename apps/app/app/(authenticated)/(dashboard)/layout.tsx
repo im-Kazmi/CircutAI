@@ -1,6 +1,10 @@
 "use client";
 import { useOnboardingDialog } from "@/app/store/use-onboarding-dialog";
-import { RedirectToSignIn, useUser } from "@repo/auth/client";
+import {
+  RedirectToSignIn,
+  useOrganizationList,
+  useUser,
+} from "@repo/auth/client";
 import { Button } from "@repo/design-system/components/ui/button";
 import { SidebarProvider } from "@repo/design-system/components/ui/sidebar";
 import { type ReactNode, useEffect } from "react";
@@ -15,16 +19,19 @@ type AppLayoutProperties = {
 const AppLayout = ({ children }: AppLayoutProperties) => {
   const { user, isSignedIn } = useUser();
 
-  const { membership, organization } = useOrganization({
+  const { membership, organization, isLoaded } = useOrganization({
     memberships: true,
   });
+
+  const { setActive } = useOrganizationList();
 
   if (!isSignedIn) {
     RedirectToSignIn({});
   }
 
-  if (isSignedIn && (!membership || !organization))
+  if (isSignedIn && isLoaded && (!membership || !organization)) {
     return redirect("/create-org");
+  }
 
   return (
     <SidebarProvider>
