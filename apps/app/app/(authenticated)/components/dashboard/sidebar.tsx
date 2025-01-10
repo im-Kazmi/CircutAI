@@ -53,6 +53,7 @@ import {
 import type { ReactNode } from "react";
 import { OrganizationSwitcher } from "@repo/auth/client";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type GlobalSidebarProperties = {
   readonly children: ReactNode;
@@ -115,15 +116,19 @@ const data = {
       items: [
         {
           title: "Profile",
-          url: "settings/profile",
+          url: "/dashboard/settings/profile",
+        },
+        {
+          title: "Organization",
+          url: "/dashboard/settings/organization",
         },
         {
           title: "Billing",
-          url: "settings/billing",
+          url: "/dashboard/settings/billing",
         },
         {
           title: "Api Keys",
-          url: "settings/api-keys",
+          url: "/dashboard/settings/api-keys",
         },
       ],
     },
@@ -209,9 +214,9 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
                             {item.items?.map((subItem) => (
                               <SidebarMenuSubItem key={subItem.title}>
                                 <SidebarMenuSubButton asChild>
-                                  <a href={subItem.url}>
+                                  <Link href={subItem.url}>
                                     <span>{subItem.title}</span>
-                                  </a>
+                                  </Link>
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
                             ))}

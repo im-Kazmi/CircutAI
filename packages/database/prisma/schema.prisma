@@ -58,21 +58,21 @@ model Organization {
   publicMetadata          Json     @default("{}")
 
   users   User[]
-  agents  Agent[]
+  circuts Circut[]
   apiKeys APIKey[]
 }
 
-model Agent {
+model Circut {
   id          String       @id @default(cuid())
   name        String
   description String?
   orgId       String
   org         Organization @relation(fields: [orgId], references: [id])
-  config      Json? // Store dynamic agent configurations like apiKey, model, temperature
+  config      Json? // Store dynamic circut configurations like apiKey, model, temperature
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  tools            AgentTool[]
+  tools            CircutTool[]
   memory           Memory[]
   workflows        Workflow[]
   ExecutionHistory ExecutionHistory[]
@@ -82,8 +82,8 @@ model Memory {
   id          String        @id @default(cuid())
   name        String
   description String?
-  agentId     String
-  agent       Agent         @relation(fields: [agentId], references: [id])
+  circutId    String
+  circut      Circut        @relation(fields: [circutId], references: [id])
   vectorData  Bytes // Stores the embedding vector (using `pgvector`)
   content     String // Original text/content that generated the vector
   metadata    Json // Additional info (e.g., tags, source, timestamps)
@@ -115,23 +115,23 @@ model Tool {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  AgentTool AgentTool[]
+  CircutTool CircutTool[]
 }
 
-model AgentTool {
-  id      String @id @default(cuid())
-  agentId String
-  agent   Agent  @relation(fields: [agentId], references: [id])
-  toolId  String
-  tool    Tool   @relation(fields: [toolId], references: [id])
+model CircutTool {
+  id       String @id @default(cuid())
+  circutId String
+  circut   Circut @relation(fields: [circutId], references: [id])
+  toolId   String
+  tool     Tool   @relation(fields: [toolId], references: [id])
 }
 
 model Workflow {
   id          String   @id @default(cuid())
   name        String
   description String?
-  agentId     String
-  agent       Agent    @relation(fields: [agentId], references: [id])
+  circutId    String
+  circut      Circut   @relation(fields: [circutId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -157,10 +157,10 @@ model MemoryAudit {
 
 model ExecutionHistory {
   id          String   @id @default(cuid())
-  agentId     String
-  agent       Agent    @relation(fields: [agentId], references: [id])
+  circutId    String
+  circut      Circut   @relation(fields: [circutId], references: [id])
   executionId String // ID of the specific execution instance
-  input       Json // The input data passed to the agent
-  output      Json // The output data returned by the agent
+  input       Json // The input data passed to the circut
+  output      Json // The output data returned by the circut
   createdAt   DateTime @default(now())
 }
