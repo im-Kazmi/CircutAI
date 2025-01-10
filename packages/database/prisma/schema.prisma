@@ -15,6 +15,20 @@ enum AccountStatus {
   ACTIVE
 }
 
+enum LLMType {
+  ANTHROPIC
+  OPENAI
+  MISTRAL
+  TOGETHER
+  GROQ
+  GOOGLE
+  COHERE
+  FIREWORKS
+  PERPLEXITY
+  DEEPSEEK
+  XAI
+}
+
 model User {
   clerkId         String        @id
   name            String
@@ -78,6 +92,18 @@ model Memory {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   memoryAudit MemoryAudit[] // History of changes to memory
+  Document    Document[]
+}
+
+model Document {
+  id                String   @id @default(cuid())
+  memoryId          String
+  memory            Memory   @relation(fields: [memoryId], references: [id])
+  fileName          String
+  fileType          String
+  fileSize          Int?
+  uploadDate        DateTime @default(now())
+  extracted_content String?
 }
 
 model Tool {
@@ -114,6 +140,7 @@ model APIKey {
   id        String       @id @default(cuid())
   orgId     String
   org       Organization @relation(fields: [orgId], references: [id])
+  type      LLMType
   key       String       @unique
   createdAt DateTime     @default(now())
   revokedAt DateTime?

@@ -48,9 +48,11 @@ import {
   ShareIcon,
   Store,
   Trash2Icon,
+  Notebook,
 } from "lucide-react";
 import type { ReactNode } from "react";
-import StoreSwitcher from "../store/store-switcher";
+import { OrganizationSwitcher } from "@repo/auth/client";
+import { useRouter } from "next/navigation";
 
 type GlobalSidebarProperties = {
   readonly children: ReactNode;
@@ -64,42 +66,26 @@ const data = {
   },
   navMain: [
     {
-      title: "Store",
+      title: "Dashboard",
       url: "/dashboard",
       icon: Store,
       isActive: true,
       items: [
         {
-          title: "Products",
-          url: "/dashboard/products",
+          title: "Circuts",
+          url: "/dashboard/circuts",
         },
         {
-          title: "Discounts",
-          url: "/dashboard/discounts",
+          title: "Memory",
+          url: "/dashboard/memory",
         },
         {
-          title: "Benefits",
-          url: "/dashboard/benefits",
+          title: "Models",
+          url: "/dashboard/models",
         },
         {
-          title: "Licences",
-          url: "/dashboard/licences",
-        },
-        {
-          title: "Customers",
-          url: "/dashboard/customers",
-        },
-        {
-          title: "Subscriptions",
-          url: "/dashboard/subscriptions",
-        },
-        {
-          title: "Orders",
-          url: "/dashboard/orders",
-        },
-        {
-          title: "Sales",
-          url: "/dashboard/sales",
+          title: "Templates",
+          url: "/dashboard/templates",
         },
       ],
     },
@@ -128,25 +114,25 @@ const data = {
       icon: Settings2Icon,
       items: [
         {
-          title: "General",
-          url: "settings/general",
+          title: "Profile",
+          url: "settings/profile",
         },
         {
-          title: "Webhooks",
-          url: "settings/webhooks",
+          title: "Billing",
+          url: "settings/billing",
         },
         {
-          title: "Payouts",
-          url: "settings/payouts",
+          title: "Api Keys",
+          url: "settings/api-keys",
         },
       ],
     },
   ],
   navSecondary: [
     {
-      title: "Webhooks",
-      url: "/webhooks",
-      icon: AnchorIcon,
+      title: "Changelog",
+      url: "/changelog",
+      icon: Notebook,
     },
     {
       title: "Support",
@@ -171,6 +157,7 @@ const data = {
 export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
   const sidebar = useSidebar();
 
+  const router = useRouter();
   return (
     <>
       <Sidebar variant="inset">
@@ -183,7 +170,11 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
                   sidebar.open ? "" : "-mx-1",
                 )}
               >
-                <StoreSwitcher />
+                <OrganizationSwitcher
+                // afterSelectOrganizationUrl={(org) => {
+                //   router.push(org.slug);
+                // }}
+                />
               </div>
             </SidebarMenuItem>
           </SidebarMenu>

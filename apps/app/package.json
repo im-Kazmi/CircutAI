@@ -16,7 +16,6 @@
     "@hookform/resolvers": "^3.9.1",
     "@prisma/client": "6.0.1",
     "@repo/auth": "workspace:*",
-    "@repo/collaboration": "workspace:*",
     "@repo/config": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/design-system": "workspace:*",
@@ -48,7 +47,6 @@
     "zustand": "^5.0.2"
   },
   "devDependencies": {
-    "@repo/testing": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.1.0",

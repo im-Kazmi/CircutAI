@@ -1,5 +1,4 @@
-import { Dependency } from "@/helpers/dependency";
-import { prisma } from "@repo/database";
+import { Dependency } from "../helpers/dependency";
 import { UserService } from "./user";
 
 export const userHonoService = new Dependency(

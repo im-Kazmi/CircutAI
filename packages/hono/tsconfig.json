@@ -2,8 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@repo/*": ["./*"]
+      "@/*": ["./*"]
     },
     "target": "ESNext",
     "module": "ESNext",

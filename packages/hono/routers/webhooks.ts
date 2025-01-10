@@ -2,7 +2,7 @@ import type { WebhookEvent } from "@repo/auth/server";
 import { Hono } from "hono";
 import { Webhook } from "svix";
 
-import { userHonoService } from "@/serices";
+import { userHonoService } from "../services";
 
 const app = new Hono()
   .use(userHonoService.middleware("userService"))
