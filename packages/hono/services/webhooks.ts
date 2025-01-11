@@ -17,7 +17,7 @@ export class WebhookService extends BaseService {
 
     const body = await c.req.text();
 
-    const webhook = new Webhook("whsec_CYxEgedyJ7qBkgfQdN2uWGgH1V7mLCKi");
+    const webhook = new Webhook("whsec_Urgi9cWNT60kwLhlUbt1ec3uktKNwPGy");
 
     let event: WebhookEvent | undefined;
 
@@ -42,7 +42,7 @@ export class WebhookService extends BaseService {
         case "user.created": {
           const { id, email_addresses, image_url, first_name, last_name } =
             event.data;
-          response = userService.createUser({
+          response = await userService.createUser({
             clerkId: id,
             email: email_addresses[0].email_address,
             avatarUrl: image_url ?? null,
@@ -53,7 +53,7 @@ export class WebhookService extends BaseService {
         case "user.updated": {
           const { id, email_addresses, image_url, first_name, last_name } =
             event.data;
-          response = userService.updateUser(id, {
+          response = await userService.updateUser(id, {
             email: email_addresses[0].email_address,
             avatarUrl: image_url ?? null,
             name: `${first_name}${last_name ? ` ${last_name}` : ""}`,
@@ -63,7 +63,7 @@ export class WebhookService extends BaseService {
         case "user.deleted": {
           const { id } = event.data;
           if (id) {
-            response = userService.deleteUser(id);
+            response = await userService.deleteUser(id);
           }
           break;
         }
@@ -82,12 +82,12 @@ export class WebhookService extends BaseService {
             max_allowed_memberships,
           } = event.data;
 
-          response = orgService.createOrganization({
+          response = await orgService.createOrganization({
+            id: id,
             name,
             slug,
-            createdBy: created_by ?? null,
             membersCount: members_count ?? null,
-            avatarUrl: image_url ?? null,
+            imgUrl: image_url ?? null,
           });
           break;
         }
@@ -104,25 +104,25 @@ export class WebhookService extends BaseService {
             max_allowed_memberships,
           } = event.data;
 
-          // response = orgService.updateOrg(id, {
-          //   name,
-          //   slug,
-          //   avatarUrl: image_url ?? null,
-          // });
+          response = await orgService.updateOrganization(id, {
+            name,
+            slug,
+            imgUrl: image_url ?? null,
+          });
           break;
         }
         case "organizationMembership.created": {
           const { organization, permissions, role, id } = event.data;
 
-          // response = orgService.updateOrg(organization.id, {
-          //   membersCount: organization.members_count,
-          // });
+          response = await orgService.updateOrganization(organization.id, {
+            membersCount: organization.members_count,
+          });
           break;
         }
         case "organizationMembership.deleted": {
           const { organization, permissions, role, id } = event.data;
 
-          response = orgService.updateOrganization(organization.id, {
+          response = await orgService.updateOrganization(organization.id, {
             membersCount: organization.members_count,
           });
           break;
@@ -134,9 +134,7 @@ export class WebhookService extends BaseService {
 
       return c.json("Everything is perfect. webhook successuly handled.", 200);
     } catch (err) {
-      console.log(err);
+      return c.json(" webhook not handled correctly.", 400);
     }
-
-    return c.json(" webhook not handled correctly.", 400);
   }
 }

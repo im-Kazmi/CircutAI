@@ -3,6 +3,7 @@ import { ColumnDef } from "@repo/design-system/components/data-table";
 import { Checkbox } from "@repo/design-system/components/ui/checkbox";
 import { DataTableColumnHeader } from "@repo/design-system/components/data-table/helpers";
 import { CircutActions } from "./table-actions";
+import { Badge } from "@repo/design-system/components/ui/badge";
 
 export const circutTableColumns: ColumnDef<Circut>[] = [
   {
@@ -34,10 +35,18 @@ export const circutTableColumns: ColumnDef<Circut>[] = [
     ),
   },
   {
-    accessorKey: "orgId",
+    accessorKey: "privacy",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="storeId" />
+      <DataTableColumnHeader column={column} title="privacy" />
     ),
+    cell: ({ row }) => {
+      const privacyValue = row.original.privacy.toLowerCase();
+      const variant: any = {
+        private: "destructive",
+        public: "secondary",
+      };
+      return <Badge variant={variant[privacyValue]}>{privacyValue}</Badge>;
+    },
   },
   {
     accessorKey: "actions",

@@ -20,6 +20,7 @@ import { useCreateCircut } from "@repo/features/circut";
 import { TextureButton } from "@repo/design-system/components/ui/texture-button";
 import { ShadowWrapper } from "../shadow-wrapper";
 import { FormPrivacyInput } from "./form-privacy-input";
+import { useRouter } from "next/navigation";
 export const createCircutForm = z.object({
   name: z.string().min(2, {
     message: "circut name must be at least 2 characters.",
@@ -32,6 +33,7 @@ type CircutFormValues = z.infer<typeof createCircutForm>;
 
 export function CreateCircutForm() {
   const mutation = useCreateCircut();
+  const router = useRouter();
   const form = useForm<CircutFormValues>({
     resolver: zodResolver(createCircutForm),
     defaultValues: {
@@ -45,6 +47,7 @@ export function CreateCircutForm() {
     mutation.mutate(data, {
       onSuccess: (data, vars) => {
         toast({ title: "circut created successfully" });
+        router.push(data.id);
       },
       onError: () => {
         toast({ title: "cannot create circut" });

@@ -54,6 +54,8 @@ import type { ReactNode } from "react";
 import { OrganizationSwitcher } from "@repo/auth/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useQueryClient } from "@repo/react-query";
+import { CustomOrganizationSwitcher } from "../org/custom-org-switcher";
 
 type GlobalSidebarProperties = {
   readonly children: ReactNode;
@@ -162,7 +164,7 @@ const data = {
 export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
   const sidebar = useSidebar();
 
-  const router = useRouter();
+  const queryClient = useQueryClient();
   return (
     <>
       <Sidebar variant="inset">
@@ -175,11 +177,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
                   sidebar.open ? "" : "-mx-1",
                 )}
               >
-                <OrganizationSwitcher
-                // afterSelectOrganizationUrl={(org) => {
-                //   router.push(org.slug);
-                // }}
-                />
+                <CustomOrganizationSwitcher />
               </div>
             </SidebarMenuItem>
           </SidebarMenu>

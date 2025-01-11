@@ -8,9 +8,8 @@ import { DataTable } from "@repo/design-system/components/data-table";
 import { useGetCircuts } from "@repo/features/circut";
 
 const Page = () => {
-  const { data, isLoading } = useGetCircuts();
+  const { data, isLoading, isPending } = useGetCircuts();
 
-  console.log(data);
   return (
     <div className="">
       <ShadowWrapper>
@@ -20,7 +19,7 @@ const Page = () => {
         <DataTable
           columns={circutTableColumns}
           data={data?.data ?? []}
-          isLoading={isLoading}
+          isLoading={isLoading || isPending}
         />
       </ShadowWrapper>
     </div>
