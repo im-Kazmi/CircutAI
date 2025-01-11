@@ -15,6 +15,11 @@ enum AccountStatus {
   ACTIVE
 }
 
+enum CircutPrivacy {
+  PRIVATE
+  PUBLIC
+}
+
 enum LLMType {
   ANTHROPIC
   OPENAI
@@ -49,10 +54,10 @@ model Organization {
   name                    String
   imgUrl                  String?
   slug                    String?
-  membersCount            Int
-  pendingInvitationsCount Int
-  adminDeleteEnabled      Boolean
-  maxAllowedMemberships   Int
+  membersCount            Int?
+  pendingInvitationsCount Int?
+  adminDeleteEnabled      Boolean?
+  maxAllowedMemberships   Int?
   createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt
   publicMetadata          Json     @default("{}")
@@ -64,14 +69,15 @@ model Organization {
 }
 
 model Circut {
-  id          String       @id @default(cuid())
+  id          String        @id @default(cuid())
   name        String
+  privacy     CircutPrivacy @default(PRIVATE)
   description String?
   orgId       String
-  org         Organization @relation(fields: [orgId], references: [id])
+  org         Organization  @relation(fields: [orgId], references: [id])
   config      Json? // Store dynamic circut configurations like apiKey, model, temperature
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
   tools            CircutTool[]
   memory           Memory[]

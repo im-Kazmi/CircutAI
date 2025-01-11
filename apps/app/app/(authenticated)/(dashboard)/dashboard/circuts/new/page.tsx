@@ -2,6 +2,7 @@
 
 import { CreateCircutForm } from "@/app/(authenticated)/components/circuts/create-circut-form";
 import { ShadowWrapper } from "@/app/(authenticated)/components/shadow-wrapper";
+import { AdminPermissionRequired } from "@/app/(authenticated)/components/shared/admin-permission";
 import { Protect, useAuth } from "@repo/auth/client";
 
 export default function page() {
@@ -9,12 +10,14 @@ export default function page() {
 
   if (!has) return null;
 
-  const canManageSettings = has({ permission: "org:team_settings:manage" });
+  const havePermissions = has({ role: "org:admin" });
 
+  if (!havePermissions) {
+    return <AdminPermissionRequired />;
+  }
   return (
-    <Protect condition={(has) => has({ role: "org:admin" })}>
-      {" "}
+    <ShadowWrapper>
       <CreateCircutForm />
-    </Protect>
+    </ShadowWrapper>
   );
 }

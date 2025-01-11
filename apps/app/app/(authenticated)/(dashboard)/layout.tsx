@@ -39,7 +39,7 @@ const AppLayout = ({ children }: AppLayoutProperties) => {
       <GlobalSidebar>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0 bg-muted/50">
           <div className="min-h-[100vh]  my-5 rounded-2xl flex-1  md:min-h-min p-5">
-            <ShadowWrapper>{children}</ShadowWrapper>
+            {children}
           </div>
         </div>
       </GlobalSidebar>

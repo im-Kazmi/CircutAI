@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { ProductPriceAmountType, ProductPriceType } from "@prisma/client";
 import { Button } from "@repo/design-system/components/ui/button";
 import {
   Form,
@@ -12,64 +11,53 @@ import {
   FormMessage,
 } from "@repo/design-system/components/ui/form";
 import { Input } from "@repo/design-system/components/ui/input";
+import { Textarea } from "@repo/design-system/components/ui/textarea";
 import { toast, useToast } from "@repo/design-system/components/ui/use-toast";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import DashboardHeader from "../dashboard/dashboard-header";
-// import { CreatePriceForm } from "./create-price-form";
-// import { useCreateProduct } from "@repo/features/product/mutations/use-create-product";
-
+import { useCreateCircut } from "@repo/features/circut";
+import { TextureButton } from "@repo/design-system/components/ui/texture-button";
+import { ShadowWrapper } from "../shadow-wrapper";
+import { FormPrivacyInput } from "./form-privacy-input";
 export const createCircutForm = z.object({
   name: z.string().min(2, {
-    message: "Product name must be at least 2 characters.",
+    message: "circut name must be at least 2 characters.",
   }),
-  description: z.string().optional(),
-  prices: z
-    .array(
-      z.object({
-        type: z.enum(["one_time", "recurring"]),
-        recurringInterval: z.enum(["month", "year"]).optional(),
-        amountType: z.enum(["fixed", "custom", "free"]),
-        amount: z.number().min(0).optional(),
-        minimumAmount: z.number().min(0).optional(),
-        maximumAmount: z.number().min(0).optional(),
-        presetAmount: z.number().min(0).optional(),
-      }),
-    )
-    .min(1, {
-      message: "At least one price must be added.",
-    }),
+  description: z.string(),
+  privacy: z.enum(["PRIVATE", "PUBLIC"]),
 });
 
 type CircutFormValues = z.infer<typeof createCircutForm>;
 
 export function CreateCircutForm() {
-  // const mutation = useCreateProduct();
+  const mutation = useCreateCircut();
   const form = useForm<CircutFormValues>({
     resolver: zodResolver(createCircutForm),
     defaultValues: {
       name: "",
       description: "",
+      privacy: "PRIVATE",
     },
   });
 
   function onSubmit(data: CircutFormValues) {
-    // mutation.mutate(data, {
-    //   onSuccess: () => {
-    //     toast({ title: "product created successfully" });
-    //   },
-    //   onError: () => {
-    //     toast({ title: "cannot create product" });
-    //   },
-    //   onSettled: () => {},
-    // });
+    mutation.mutate(data, {
+      onSuccess: (data, vars) => {
+        toast({ title: "circut created successfully" });
+      },
+      onError: () => {
+        toast({ title: "cannot create circut" });
+      },
+      onSettled: () => {},
+    });
   }
 
   return (
     <div className=" mx-auto rounded-2xl ">
       <div className="p-8">
         <DashboardHeader title="Create a new Circut Agent">
-          <Button>Go back</Button>
+          <TextureButton className="w-fit">Go back</TextureButton>
         </DashboardHeader>
         <Form {...form}>
           <form
@@ -81,9 +69,9 @@ export function CreateCircutForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Product Name</FormLabel>
+                  <FormLabel>Circut/Agent Name</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder="my-chatbot" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -94,21 +82,45 @@ export function CreateCircutForm() {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Product Description</FormLabel>
+                  <FormLabel>Circut Description</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Textarea
+                      placeholder="this is circut/chatbot for my xyz"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button
-              // disabled={mutation.isPending}
+            <FormField
+              control={form.control}
+              name="privacy"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Privacy</FormLabel>
+                  <FormPrivacyInput
+                    type="PRIVATE"
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                  <FormPrivacyInput
+                    type="PUBLIC"
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <TextureButton
+              disabled={mutation.isPending}
+              variant="secondary"
               type="submit"
               className="w-full"
             >
-              Create Product
-            </Button>
+              Create Circut
+            </TextureButton>
           </form>
         </Form>
       </div>

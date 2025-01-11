@@ -21,7 +21,7 @@
     "@repo/design-system": "workspace:*",
     "@repo/env": "workspace:*",
     "@repo/feature-flags": "workspace:*",
-    "@repo/features": "workspace:^",
+    "@repo/features": "workspace:*",
     "@repo/hono": "workspace:*",
     "@repo/next-config": "workspace:*",
     "@repo/react-query": "workspace:*",

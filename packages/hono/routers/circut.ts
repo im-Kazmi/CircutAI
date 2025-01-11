@@ -1,41 +1,22 @@
+import { sortingAndPaginationSchema } from "@/schemas/sorting";
+import { circutHonoService } from "@/services";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
+import { Circut, CircutPrivacy } from "@repo/database";
 import { Hono } from "hono";
 import { z } from "zod";
 
-export const sortingAndPaginationSchema = z.object({
-  page: z.string().optional(),
-  pageSize: z.string().optional(),
-  sortBy: z.string().optional(),
-  sortOrder: z.enum(["asc", "desc"]).optional(),
-});
-
-export const createProductSchema = z.object({
+export const createCircutForm = z.object({
   name: z.string().min(2, {
-    message: "Product name must be at least 2 characters.",
+    message: "circut name must be at least 2 characters.",
   }),
-  description: z.string().optional(),
-  prices: z
-    .array(
-      z.object({
-        type: z.enum(["one_time", "recurring"]),
-        recurringInterval: z.enum(["month", "year"]).optional(),
-        amountType: z.enum(["fixed", "custom", "free"]),
-        amount: z.number().min(0).optional(),
-        minimumAmount: z.number().min(0).optional(),
-        maximumAmount: z.number().min(0).optional(),
-        presetAmount: z.number().min(0).optional(),
-      }),
-    )
-    .min(1, {
-      message: "At least one price must be added.",
-    }),
+  description: z.string(),
+  privacy: z.enum(["PRIVATE", "PUBLIC"]),
 });
 
 const app = new Hono()
   .use(clerkMiddleware())
-  .use(productHonoService.middleware("productService"))
-  .use(storeHonoService.middleware("storeService"))
+  .use(circutHonoService.middleware("circutService"))
   .get("/list", zValidator("query", sortingAndPaginationSchema), async (c) => {
     const auth = getAuth(c);
 
@@ -48,72 +29,59 @@ const app = new Hono()
       );
     }
 
-    const productService = c.var.productService;
-    const storeService = c.get("storeService");
+    const circutService = c.var.circutService;
 
     const { page, sortBy, pageSize, sortOrder } = c.req.valid("query");
 
-    const store = await storeService.getActiveStore(auth.userId);
+    const circuts = await circutService.list(
+      {
+        page: page ? Number.parseInt(page, 10) : 1,
+        pageSize: pageSize ? Number.parseInt(pageSize, 10) : 10,
+        sortBy: sortBy ? (sortBy as keyof Circut) : "name",
+        sortOrder: sortOrder ? sortOrder : "desc",
+      },
+      auth.orgId!,
+    );
 
-    if (!store) {
+    return c.json(circuts, 200);
+  })
+  .get("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
+    const { id } = c.req.valid("param");
+    const circutService = c.var.circutService;
+
+    const auth = getAuth(c);
+
+    if (!auth?.userId) {
       return c.json(
         {
-          message: "No active store found.",
+          message: "You are not logged in.",
         },
         400,
       );
     }
-    // const products = await productService.listProducts(
-    //   {
-    //     page: page ? Number.parseInt(page, 10) : 1,
-    //     pageSize: pageSize ? Number.parseInt(pageSize, 10) : 10,
-    //     sortBy: sortBy ? (sortBy as keyof Product) : 'createdAt',
-    //     sortOrder: sortOrder ? sortOrder : 'desc',
-    //   },
-    //   storeId
-    // );
 
-    const products = await productService.listProducts({}, store.id);
-    return c.json(products, 200);
+    const circut = await circutService.getCircutByIdandOrg(id, auth.orgId!);
+    return c.json(circut, 200);
+  })
+  .post("/", zValidator("json", createCircutForm), async (c) => {
+    const circutService = c.get("circutService");
+
+    const auth = getAuth(c);
+
+    if (!auth?.userId) {
+      return c.json(
+        {
+          message: "You are not logged in.",
+        },
+        400,
+      );
+    }
+
+    const values = c.req.valid("json");
+
+    const circut = await circutService.createCircut(auth.orgId!, values);
+
+    return c.json(circut, 200);
   });
-// .get("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
-//   const { id } = c.req.valid("param");
-//   const productService = c.var.productService;
-
-//   const product = await productService.getProduct(id);
-//   return c.json(product);
-// });
-// .post("/", zValidator("json", createProductSchema), async (c) => {
-//   const productService = c.get("productService");
-//   const storeService = c.get("storeService");
-
-//   const auth = getAuth(c);
-
-//   if (!auth?.userId) {
-//     return c.json(
-//       {
-//         message: "You are not logged in.",
-//       },
-//       400,
-//     );
-//   }
-
-//   const values = c.req.valid("json");
-
-//   const store = await storeService.getActiveStore(auth.userId);
-
-//   if (!store) {
-//     return c.json(
-//       {
-//         message: "No active store found.",
-//       },
-//       400,
-//     );
-//   }
-
-//   const products = await productService.createProduct(store.id, values);
-
-//   return c.json(products, 200);
-// });
 
 export default app;
