@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./icon.png?height=150&width=150" alt="Circut AI Logo" width="150" height="150">
+  <img src="./icon.svg?height=150&width=150" alt="Circut AI Logo" width="150" height="150">
   <h1>✨ Circut AI ✨</h1>
   <p>Build intelligent AI products effortlessly with an open-source, serverless framework.</p>
 
