@@ -47,7 +47,7 @@ export function CreateCircutForm() {
     mutation.mutate(data, {
       onSuccess: (data, vars) => {
         toast({ title: "circut created successfully" });
-        router.push(data.id);
+        router.push(`/dashboard/circuts/${data?.id}`);
       },
       onError: () => {
         toast({ title: "cannot create circut" });
