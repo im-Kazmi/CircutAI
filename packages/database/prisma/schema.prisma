@@ -133,25 +133,25 @@ enum MemorySourceType {
 }
 
 model Memory {
-  id          String  @id @default(cuid())
+  id          String @id @default(cuid())
   name        String
-  description String?
+  description String
 
   orgId        String
   createdBy    String
   user         User             @relation(fields: [createdBy], references: [clerkId])
   org          Organization     @relation(fields: [orgId], references: [id])
-  embedding    Bytes
+  embedding    Bytes?
   sourceType   MemorySourceType @default(FILE)
-  content      String // Original text/content that generated the vector
-  metadata     Json // Additional info (e.g., tags, source, timestamps)
-  relevance    Float // Relevance score for vector-based retrieval
-  confidence   Float
+  content      String? // Original text/content that generated the vector
+  metadata     Json? // Additional info (e.g., tags, source, timestamps)
+  relevance    Float? // Relevance score for vector-based retrieval
+  confidence   Float?
   lastAccessed DateTime?
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   memoryAudit  MemoryAudit[] // History of changes to memory
-  Document     Document[]
+  documents    Document[]
   CircutMemory CircutMemory[]
 }
 

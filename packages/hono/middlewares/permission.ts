@@ -1,4 +1,4 @@
-import { ClerkAuth } from "@/types";
+import { ClerkAuth } from "../types";
 import { auth } from "@repo/auth/server";
 import { createMiddleware } from "hono/factory";
 

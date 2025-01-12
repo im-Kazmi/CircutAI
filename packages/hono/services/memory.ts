@@ -15,7 +15,7 @@ export class MemoryService extends BaseService {
         orgId,
       },
       include: {
-        Document: true,
+        documents: true,
       },
       skip,
       take,

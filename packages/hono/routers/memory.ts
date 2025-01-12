@@ -1,8 +1,8 @@
 import { sortingAndPaginationSchema } from "../schemas/sorting";
-import { circutHonoService, memoryHonoService } from "../services";
+import { memoryHonoService } from "../services";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { Memory, MemoryPrivacy } from "@repo/database";
+import { Memory } from "@repo/database";
 import { Hono } from "hono";
 import { z } from "zod";
 
@@ -32,7 +32,7 @@ const app = new Hono()
 
     const { page, sortBy, pageSize, sortOrder } = c.req.valid("query");
 
-    const circuts = await memoryService.list(
+    const memories = await memoryService.list(
       {
         page: page ? Number.parseInt(page, 10) : 1,
         pageSize: pageSize ? Number.parseInt(pageSize, 10) : 10,
@@ -42,7 +42,7 @@ const app = new Hono()
       auth.orgId!,
     );
 
-    return c.json(circuts, 200);
+    return c.json(memories, 200);
   })
   .get("/:id", zValidator("param", z.object({ id: z.string() })), async (c) => {
     const { id } = c.req.valid("param");
@@ -59,8 +59,8 @@ const app = new Hono()
       );
     }
 
-    const circut = await memoryService.getMemoryByIdandOrg(id, auth.orgId!);
-    return c.json(circut, 200);
+    const memory = await memoryService.getMemoryByIdandOrg(id, auth.orgId!);
+    return c.json(memory, 200);
   })
   .post("/", zValidator("json", createMemoryForm), async (c) => {
     const memoryService = c.get("memoryService");
@@ -78,7 +78,7 @@ const app = new Hono()
 
     const values = c.req.valid("json");
 
-    const circut = await memoryService.createMemory(auth.orgId!, {
+    const memory = await memoryService.createMemory(auth.orgId!, {
       ...values,
       user: {
         connect: {
@@ -87,7 +87,7 @@ const app = new Hono()
       },
     });
 
-    return c.json(circut, 200);
+    return c.json(memory, 200);
   });
 
 export default app;
