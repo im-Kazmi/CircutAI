@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      langbase:
-        specifier: ^1.1.15
-        version: 1.1.15(react@19.0.0)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -63,6 +59,9 @@ importers:
       '@repo/hono':
         specifier: workspace:*
         version: link:../../packages/hono
+      '@repo/job-queue':
+        specifier: workspace:*
+        version: link:../../packages/job-queue
       '@repo/next-config':
         specifier: workspace:*
         version: link:../../packages/next-config
@@ -107,7 +106,10 @@ importers:
         version: 0.4.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       nuqs:
         specifier: ^2.2.3
-        version: 2.2.3(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
+        version: 2.2.3(next@15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
+      quirrel:
+        specifier: ^1.14.1
+        version: 1.14.1(@types/ioredis-mock@8.2.5)(bufferutil@4.0.8)
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -268,43 +270,6 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
-
-  packages/collaboration:
-    dependencies:
-      '@liveblocks/client':
-        specifier: ^2.13.1
-        version: 2.13.1
-      '@liveblocks/node':
-        specifier: ^2.13.1
-        version: 2.13.1
-      '@liveblocks/react':
-        specifier: ^2.13.1
-        version: 2.13.1(react@19.0.0)
-      '@repo/env':
-        specifier: workspace:*
-        version: link:../env
-      '@repo/features':
-        specifier: workspace:^
-        version: link:../features
-      react:
-        specifier: ^19.0.0
-        version: 19.0.0
-      server-only:
-        specifier: ^0.0.1
-        version: 0.0.1
-    devDependencies:
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      '@types/node':
-        specifier: 22.10.1
-        version: 22.10.1
-      '@types/react':
-        specifier: 19.0.1
-        version: 19.0.1
-      '@types/react-dom':
-        specifier: ^19.0.1
-        version: 19.0.1
 
   packages/config:
     dependencies:
@@ -690,6 +655,12 @@ importers:
 
   packages/hono:
     dependencies:
+      '@hono/clerk-auth':
+        specifier: ^2.0.0
+        version: 2.0.0(@clerk/backend@1.20.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(hono@4.6.13)
+      '@hono/zod-validator':
+        specifier: ^0.4.2
+        version: 0.4.2(hono@4.6.13)(zod@3.23.8)
       '@repo/types':
         specifier: workspace:*
         version: link:../types
@@ -699,6 +670,9 @@ importers:
       csv-parser:
         specifier: ^3.1.0
         version: 3.1.0
+      hono-rate-limiter:
+        specifier: ^0.4.2
+        version: 0.4.2(hono@4.6.13)
       papaparse:
         specifier: ^5.5.1
         version: 5.5.1
@@ -711,6 +685,9 @@ importers:
       zod:
         specifier: ^3.23.8
         version: 3.23.8
+      zod-validator:
+        specifier: link:@types/@hono/zod-validator
+        version: link:@types/@hono/zod-validator
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
@@ -718,6 +695,22 @@ importers:
       '@types/node':
         specifier: 22.10.1
         version: 22.10.1
+
+  packages/job-queue:
+    dependencies:
+      '@repo/env':
+        specifier: workspace:*
+        version: link:../env
+      quirrel:
+        specifier: ^1.14.1
+        version: 1.14.1(@types/ioredis-mock@8.2.5)(bufferutil@4.0.8)
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
 
   packages/models:
     dependencies:
@@ -818,22 +811,6 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
-      typescript:
-        specifier: ^5.7.2
-        version: 5.7.2
-
-  packages/quirrel:
-    dependencies:
-      quirrel:
-        specifier: ^1.14.1
-        version: 1.14.1(@types/ioredis-mock@8.2.5)(bufferutil@4.0.8)
-    devDependencies:
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      '@types/node':
-        specifier: 22.10.1
-        version: 22.10.1
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
@@ -953,15 +930,6 @@ importers:
       tailwindcss:
         specifier: ^3.4.16
         version: 3.4.16(ts-node@10.9.2(@swc/core@1.3.101(@swc/helpers@0.5.13))(@types/node@22.10.1)(typescript@5.7.2))
-
-  packages/testing:
-    devDependencies:
-      '@vitejs/plugin-react':
-        specifier: ^4.3.4
-        version: 4.3.4(vite@5.4.10(@types/node@22.10.1)(terser@5.31.0))
-      vitest:
-        specifier: ^2.1.8
-        version: 2.1.8(@types/node@22.10.1)(jsdom@25.0.1(bufferutil@4.0.8))(terser@5.31.0)
 
   packages/types:
     dependencies:
@@ -1133,10 +1101,6 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0
 
-  '@babel/helper-plugin-utils@7.25.9':
-    resolution: {integrity: sha512-kSMlyUVdWe25rEsRGviIgOWnoT/nfABVWlqt9N19/dIPWViAOW2s9wznP5tURbs/IDuNk4gPy3YdYRgH3uxhBw==}
-    engines: {node: '>=6.9.0'}
-
   '@babel/helper-string-parser@7.25.9':
     resolution: {integrity: sha512-4A/SCr/2KLd5jrtOMFzaKjVtAei3+2r/NChoBNoZ3EyP/+GlhoaEGoWOZUmFmoITP7zOJyHIMm+DYRd8o3PvHA==}
     engines: {node: '>=6.9.0'}
@@ -1166,18 +1130,6 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  '@babel/plugin-transform-react-jsx-self@7.25.9':
-    resolution: {integrity: sha512-y8quW6p0WHkEhmErnfe58r7x0A70uKphQm8Sp8cV7tjNQwK56sNVK0M73LK3WuYmsuyrftut4xAkjjgU0twaMg==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-
-  '@babel/plugin-transform-react-jsx-source@7.25.9':
-    resolution: {integrity: sha512-+iqjT8xmXhhYv4/uiYd8FNQsraMFZIfxVSqxxVSZP0WbbSAWvBXAul0m/zu+7Vv4O/3WtApy9pmaTMiumEZgfg==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-
   '@babel/runtime-corejs3@7.26.0':
     resolution: {integrity: sha512-YXHu5lN8kJCb1LOb9PgV6pvak43X2h4HvRApcN5SdWeaItQOzfn1hgP6jasD6KWQyJDBxrVmA9o9OivlnNJK/w==}
     engines: {node: '>=6.9.0'}
@@ -1197,18 +1149,6 @@ packages:
   '@babel/types@7.26.0':
     resolution: {integrity: sha512-Z/yiTPj+lDVnF7lWeKCIJzaIkI0vYO87dMpZ4bg4TDrFe4XXLFWL1TbXU27gBP3QccxV9mZICCrnjnYlJjXHOA==}
     engines: {node: '>=6.9.0'}
-
-  '@baseai/core@0.9.39':
-    resolution: {integrity: sha512-RWo0s1ryxXt4Cx3EA5en52/p4Xpn0g201uHAvP1IA9sXRB0F/qTn/rfxG+LbNVyniAAr1OeARJT2YdtnRGNXbg==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      react: ^18 || ^19
-      zod: ^3.0.0
-    peerDependenciesMeta:
-      react:
-        optional: true
-      zod:
-        optional: true
 
   '@biomejs/biome@1.9.4':
     resolution: {integrity: sha512-1rkd7G70+o9KkTn5KLmDYXihGoTaIGO9PIIN2ZB7UJxFrWw04CZHPYiMRjYsaDvVV7hP1dYNRLxSANLaBFGpog==}
@@ -1576,6 +1516,19 @@ packages:
   '@floating-ui/utils@0.2.2':
     resolution: {integrity: sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==}
 
+  '@hono/clerk-auth@2.0.0':
+    resolution: {integrity: sha512-ad+U8jDlBPgXBTv8BRnPrSFC/uX8U0ojiCR77I3WWHm5I9L3/bHsZpQ2lgvLTV3YbJyVmAdKJArEAQiPjodGdA==}
+    engines: {node: '>=16.x.x'}
+    peerDependencies:
+      '@clerk/backend': ^1.0.0
+      hono: '>=3.*'
+
+  '@hono/zod-validator@0.4.2':
+    resolution: {integrity: sha512-1rrlBg+EpDPhzOV4hT9pxr5+xDVmKuz6YJl+la7VCwK6ass5ldyKm5fD+umJdV2zhHD6jROoCCv8NbTwyfhT0g==}
+    peerDependencies:
+      hono: '>=3.9.0'
+      zod: ^3.19.1
+
   '@hookform/resolvers@3.9.1':
     resolution: {integrity: sha512-ud2HqmGBM0P0IABqoskKWI6PEf6ZDDBZkFqe2Vnl+mTHCEHzr3ISjjZyCwTjC/qpL25JC9aIDkloQejvMeq0ug==}
     peerDependencies:
@@ -1723,20 +1676,6 @@ packages:
   '@langchain/core@0.3.18':
     resolution: {integrity: sha512-IEZCrFs1Xd0J2FTH1D3Lnm3/Yk2r8LSpwDeLYwcCom3rNAK5k4mKQ2rwIpNq3YuqBdrTNMKRO+PopjkP1SB17A==}
     engines: {node: '>=18'}
-
-  '@liveblocks/client@2.13.1':
-    resolution: {integrity: sha512-lID7zLeqHWJxmrFaUGWE23ItG78ox6xAz9lSVQV7vqjJFyDisivE+toJ7OKTViRftqvO4s7HgqMNh7PMmUrFKw==}
-
-  '@liveblocks/core@2.13.1':
-    resolution: {integrity: sha512-pSb46I/Uvo5NkIR5G4Gc74mPh1xjyok5uyaIO7eFX4E/zBZWWK/XEIgufTlDS9yqlLWW78XdJL2OSI5pK5+7iw==}
-
-  '@liveblocks/node@2.13.1':
-    resolution: {integrity: sha512-eEHrJe4mB4qF1Sv0GAQv7+Ec5de1W4SxfF0StpKxLC4T+8ZTJLoEatTrwQVP7cBXiDGAbdcJL7NPRaWPI6Xzzg==}
-
-  '@liveblocks/react@2.13.1':
-    resolution: {integrity: sha512-UeJO6Vu5pbxOUiWKx7+OmfmDnXfqV9VJ5hmDiCHryojibM67xOnIwRpY7lvediEUtTU/U2230kXr5QfpaWmX7A==}
-    peerDependencies:
-      react: ^16.14.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
 
   '@logtail/next@0.1.7':
     resolution: {integrity: sha512-1CEBO+C65PGI1THcanwuyLkD8G3w6PLudEgZBY/okCH5cR1FPBJiztkkBkP4wasQfsNJiFkYEmHkFriLM67SfQ==}
@@ -3424,18 +3363,6 @@ packages:
   '@types/aria-query@5.0.4':
     resolution: {integrity: sha512-rfT93uj5s0PRL7EzccGMs3brplhcrghnDoV26NqKhCAS1hVo+WdNsPvE/yb6ilfr5hi2MEk6d5EWJTKdxg8jVw==}
 
-  '@types/babel__core@7.20.5':
-    resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
-
-  '@types/babel__generator@7.6.8':
-    resolution: {integrity: sha512-ASsj+tpEDsEiFr1arWrlN6V3mdfjRMZt6LtK/Vp/kreFLnr5QH5+DhvD5nINYZXzwJvXeGq+05iUXcAzVrqWtw==}
-
-  '@types/babel__template@7.4.4':
-    resolution: {integrity: sha512-h/NUaSyG5EyxBIp8YRxo4RMe2/qQgvyowRwVMzhYhBCONbW8PUsg4lkFMrhgZhUe5z3L3MiLDuvyJ/CaPa2A8A==}
-
-  '@types/babel__traverse@7.20.6':
-    resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
-
   '@types/connect@3.4.36':
     resolution: {integrity: sha512-P63Zd/JUGq+PdrM1lv0Wv5SBYeA2+CORvbrXbngriYY0jzLUWfQMQQxOhjONEz/wlHOAxOdY7CY65rgQdTjq2w==}
 
@@ -3668,12 +3595,6 @@ packages:
         optional: true
       vite:
         optional: true
-
-  '@vitejs/plugin-react@4.3.4':
-    resolution: {integrity: sha512-SCCPBJtYLdE8PX/7ZQAs1QAZ8Jqwih+0VBLum1EGqmCCQal+MIUqLCzj3ZUy8ufbC0cAM4LRlSTm7IQJwWT4ug==}
-    engines: {node: ^14.18.0 || >=16.0.0}
-    peerDependencies:
-      vite: ^4.2.0 || ^5.0.0 || ^6.0.0
 
   '@vitest/expect@2.1.8':
     resolution: {integrity: sha512-8ytZ/fFHq2g4PJVAtDX57mayemKgDR6X3Oa2Foro+EygiOJHUXhCqBAAKQYYajZpFoIfvBCF1j6R6IYRSIUFuw==}
@@ -5062,6 +4983,11 @@ packages:
     resolution: {integrity: sha512-eSmmWE5bZTK2Nou4g0AI3zZ9rswp7GRKoKXS1BLUkvPviOqs4YTN1djQIqrXy9k5gEtdLPy86JjRwsNM9tnDcA==}
     engines: {node: '>=0.10.0'}
 
+  hono-rate-limiter@0.4.2:
+    resolution: {integrity: sha512-AAtFqgADyrmbDijcRTT/HJfwqfvhalya2Zo+MgfdrMPas3zSMD8SU03cv+ZsYwRU1swv7zgVt0shwN059yzhjw==}
+    peerDependencies:
+      hono: ^4.1.1
+
   hono@4.6.13:
     resolution: {integrity: sha512-haV0gaMdSjy9URCRN9hxBPlqHa7fMm/T72kAImIxvw4eQLbNz1rgjN4hHElLJSieDiNuiIAXC//cC6YGz2KCbg==}
     engines: {node: '>=16.9.0'}
@@ -5412,10 +5338,6 @@ packages:
   koalas@1.0.2:
     resolution: {integrity: sha512-RYhBbYaTTTHId3l6fnMZc3eGQNW6FVCqMG6AMwA5I1Mafr6AflaXeoi6x3xQuATRotGYRLk6+1ELZH4dstFNOA==}
     engines: {node: '>=0.10.0'}
-
-  langbase@1.1.15:
-    resolution: {integrity: sha512-V630hQWGLWyzFBmnLuGyGnVv3jumYMS4rlewky5fj45O334aa9NxtzMVlmf+T++t+XJgfHgi9OEIMFRwjhfoEA==}
-    engines: {node: '>=18'}
 
   langsmith@0.2.7:
     resolution: {integrity: sha512-9LFOp30cQ9K/7rzMt4USBI0SEKKhsH4l42ZERBPXOmDXnR5gYpsGFw8SZR0A6YLnc6vvoEmtr/XKel0Odq2UWw==}
@@ -6434,10 +6356,6 @@ packages:
 
   react-promise-suspense@0.3.4:
     resolution: {integrity: sha512-I42jl7L3Ze6kZaq+7zXWSunBa3b1on5yfvUW6Eo/3fFOj6dZ5Bqmcd264nJbTK/gn1HjjILAjSwnZbV4RpSaNQ==}
-
-  react-refresh@0.14.2:
-    resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
-    engines: {node: '>=0.10.0'}
 
   react-remove-scroll-bar@2.3.6:
     resolution: {integrity: sha512-DtSYaao4mBmX+HDo5YWYdBWQwYIQQshUV/dVxFxK+KM26Wjwp1gZ6rv6OC3oujI6Bfu6Xyg3TwK533AQutsn/g==}
@@ -7574,12 +7492,6 @@ packages:
     peerDependencies:
       zod: ^3.23.3
 
-  zod-validation-error@3.4.0:
-    resolution: {integrity: sha512-ZOPR9SVY6Pb2qqO5XHt+MkkTRxGXb4EVtnjc9JpXUOtUB1T9Ru7mZOT361AN3MsetVe7R0a1KZshJDZdgp9miQ==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      zod: ^3.18.0
-
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
@@ -7766,8 +7678,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-plugin-utils@7.25.9': {}
-
   '@babel/helper-string-parser@7.25.9': {}
 
   '@babel/helper-validator-identifier@7.24.6': {}
@@ -7791,16 +7701,6 @@ snapshots:
   '@babel/parser@7.26.2':
     dependencies:
       '@babel/types': 7.26.0
-
-  '@babel/plugin-transform-react-jsx-self@7.25.9(@babel/core@7.26.0)':
-    dependencies:
-      '@babel/core': 7.26.0
-      '@babel/helper-plugin-utils': 7.25.9
-
-  '@babel/plugin-transform-react-jsx-source@7.25.9(@babel/core@7.26.0)':
-    dependencies:
-      '@babel/core': 7.26.0
-      '@babel/helper-plugin-utils': 7.25.9
 
   '@babel/runtime-corejs3@7.26.0':
     dependencies:
@@ -7833,15 +7733,6 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
-
-  '@baseai/core@0.9.39(react@19.0.0)(zod@3.24.1)':
-    dependencies:
-      openai: 4.78.1(zod@3.24.1)
-    optionalDependencies:
-      react: 19.0.0
-      zod: 3.24.1
-    transitivePeerDependencies:
-      - encoding
 
   '@biomejs/biome@1.9.4':
     optionalDependencies:
@@ -8174,6 +8065,16 @@ snapshots:
 
   '@floating-ui/utils@0.2.2': {}
 
+  '@hono/clerk-auth@2.0.0(@clerk/backend@1.20.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(hono@4.6.13)':
+    dependencies:
+      '@clerk/backend': 1.20.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      hono: 4.6.13
+
+  '@hono/zod-validator@0.4.2(hono@4.6.13)(zod@3.23.8)':
+    dependencies:
+      hono: 4.6.13
+      zod: 3.23.8
+
   '@hookform/resolvers@3.9.1(react-hook-form@7.54.0(react@19.0.0))':
     dependencies:
       react-hook-form: 7.54.0(react@19.0.0)
@@ -8308,28 +8209,6 @@ snapshots:
       zod-to-json-schema: 3.23.5(zod@3.24.1)
     transitivePeerDependencies:
       - openai
-
-  '@liveblocks/client@2.13.1':
-    dependencies:
-      '@liveblocks/core': 2.13.1
-
-  '@liveblocks/core@2.13.1': {}
-
-  '@liveblocks/node@2.13.1':
-    dependencies:
-      '@liveblocks/core': 2.13.1
-      '@stablelib/base64': 1.0.1
-      fast-sha256: 1.3.0
-      node-fetch: 2.7.0
-    transitivePeerDependencies:
-      - encoding
-
-  '@liveblocks/react@2.13.1(react@19.0.0)':
-    dependencies:
-      '@liveblocks/client': 2.13.1
-      '@liveblocks/core': 2.13.1
-      react: 19.0.0
-      use-sync-external-store: 1.2.2(react@19.0.0)
 
   '@logtail/next@0.1.7(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
     dependencies:
@@ -10128,27 +10007,6 @@ snapshots:
 
   '@types/aria-query@5.0.4': {}
 
-  '@types/babel__core@7.20.5':
-    dependencies:
-      '@babel/parser': 7.26.2
-      '@babel/types': 7.26.0
-      '@types/babel__generator': 7.6.8
-      '@types/babel__template': 7.4.4
-      '@types/babel__traverse': 7.20.6
-
-  '@types/babel__generator@7.6.8':
-    dependencies:
-      '@babel/types': 7.26.0
-
-  '@types/babel__template@7.4.4':
-    dependencies:
-      '@babel/parser': 7.26.2
-      '@babel/types': 7.26.0
-
-  '@types/babel__traverse@7.20.6':
-    dependencies:
-      '@babel/types': 7.26.0
-
   '@types/connect@3.4.36':
     dependencies:
       '@types/node': 22.10.1
@@ -10244,10 +10102,12 @@ snapshots:
     dependencies:
       '@types/node': 22.10.1
       form-data: 4.0.1
+    optional: true
 
   '@types/node@18.19.70':
     dependencies:
       undici-types: 5.26.5
+    optional: true
 
   '@types/node@22.10.1':
     dependencies:
@@ -10375,17 +10235,6 @@ snapshots:
       next: 15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react: 19.0.0
       vite: 5.4.10(@types/node@22.10.1)(terser@5.31.0)
-
-  '@vitejs/plugin-react@4.3.4(vite@5.4.10(@types/node@22.10.1)(terser@5.31.0))':
-    dependencies:
-      '@babel/core': 7.26.0
-      '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.0)
-      '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.0)
-      '@types/babel__core': 7.20.5
-      react-refresh: 0.14.2
-      vite: 5.4.10(@types/node@22.10.1)(terser@5.31.0)
-    transitivePeerDependencies:
-      - supports-color
 
   '@vitest/expect@2.1.8':
     dependencies:
@@ -10614,6 +10463,7 @@ snapshots:
   agentkeepalive@4.6.0:
     dependencies:
       humanize-ms: 1.2.1
+    optional: true
 
   aggregate-error@3.1.0:
     dependencies:
@@ -11679,7 +11529,8 @@ snapshots:
       cross-spawn: 7.0.3
       signal-exit: 4.1.0
 
-  form-data-encoder@1.7.2: {}
+  form-data-encoder@1.7.2:
+    optional: true
 
   form-data@4.0.1:
     dependencies:
@@ -11691,6 +11542,7 @@ snapshots:
     dependencies:
       node-domexception: 1.0.0
       web-streams-polyfill: 4.0.0-beta.3
+    optional: true
 
   forwarded@0.2.0: {}
 
@@ -11889,6 +11741,10 @@ snapshots:
     dependencies:
       parse-passwd: 1.0.0
 
+  hono-rate-limiter@0.4.2(hono@4.6.13):
+    dependencies:
+      hono: 4.6.13
+
   hono@4.6.13: {}
 
   html-encoding-sniffer@4.0.0:
@@ -11955,6 +11811,7 @@ snapshots:
   humanize-ms@1.2.1:
     dependencies:
       ms: 2.1.3
+    optional: true
 
   iconv-lite@0.4.24:
     dependencies:
@@ -12293,17 +12150,6 @@ snapshots:
       keycode: 2.2.1
 
   koalas@1.0.2: {}
-
-  langbase@1.1.15(react@19.0.0):
-    dependencies:
-      '@baseai/core': 0.9.39(react@19.0.0)(zod@3.24.1)
-      dotenv: 16.4.5
-      openai: 4.78.1(zod@3.24.1)
-      zod: 3.24.1
-      zod-validation-error: 3.4.0(zod@3.24.1)
-    transitivePeerDependencies:
-      - encoding
-      - react
 
   langsmith@0.2.7(openai@4.78.1(zod@3.24.1)):
     dependencies:
@@ -12837,7 +12683,8 @@ snapshots:
 
   node-addon-api@6.1.0: {}
 
-  node-domexception@1.0.0: {}
+  node-domexception@1.0.0:
+    optional: true
 
   node-ensure@0.0.0: {}
 
@@ -12881,7 +12728,7 @@ snapshots:
     dependencies:
       path-key: 3.1.1
 
-  nuqs@2.2.3(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0):
+  nuqs@2.2.3(next@15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0):
     dependencies:
       mitt: 3.0.1
       react: 19.0.0
@@ -12937,6 +12784,7 @@ snapshots:
       zod: 3.24.1
     transitivePeerDependencies:
       - encoding
+    optional: true
 
   openapi-types@12.1.3: {}
 
@@ -13508,8 +13356,6 @@ snapshots:
   react-promise-suspense@0.3.4:
     dependencies:
       fast-deep-equal: 2.0.1
-
-  react-refresh@0.14.2: {}
 
   react-remove-scroll-bar@2.3.6(@types/react@19.0.1)(react@19.0.0):
     dependencies:
@@ -14313,7 +14159,8 @@ snapshots:
 
   ultracite@4.1.8: {}
 
-  undici-types@5.26.5: {}
+  undici-types@5.26.5:
+    optional: true
 
   undici-types@6.20.0: {}
 
@@ -14570,7 +14417,8 @@ snapshots:
     dependencies:
       defaults: 1.0.4
 
-  web-streams-polyfill@4.0.0-beta.3: {}
+  web-streams-polyfill@4.0.0-beta.3:
+    optional: true
 
   web-vitals@4.2.4: {}
 
@@ -14721,10 +14569,6 @@ snapshots:
     optional: true
 
   zod-to-json-schema@3.23.5(zod@3.24.1):
-    dependencies:
-      zod: 3.24.1
-
-  zod-validation-error@3.4.0(zod@3.24.1):
     dependencies:
       zod: 3.24.1
 

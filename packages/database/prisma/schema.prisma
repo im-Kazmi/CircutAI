@@ -54,6 +54,7 @@ model User {
   Organization    Organization? @relation(fields: [organizationId], references: [id])
   organizationId  String?
   Circut          Circut[]
+  Memory          Memory[]
 }
 
 model Organization {
@@ -137,6 +138,8 @@ model Memory {
   description String?
 
   orgId        String
+  createdBy    String
+  user         User             @relation(fields: [createdBy], references: [clerkId])
   org          Organization     @relation(fields: [orgId], references: [id])
   embedding    Bytes
   sourceType   MemorySourceType @default(FILE)

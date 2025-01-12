@@ -2,7 +2,7 @@ import {
   authMiddleware,
   requireAdmin,
   requireMember,
-} from "@/middlewares/permission";
+} from "../middlewares/permission";
 import { Hono } from "hono";
 
 const app = new Hono()

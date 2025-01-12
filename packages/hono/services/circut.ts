@@ -1,6 +1,6 @@
 import { prisma, Prisma } from "@repo/database";
 import { BaseService } from "./base-service";
-import { PaginationParams, QueryUtils, SortingParams } from "@/utils/query";
+import { PaginationParams, QueryUtils, SortingParams } from "../utils/query";
 
 export class CircutService extends BaseService {
   list(
@@ -15,7 +15,7 @@ export class CircutService extends BaseService {
         orgId,
       },
       include: {
-        memory: true,
+        memories: true,
       },
       skip,
       take,
@@ -88,13 +88,13 @@ export class CircutService extends BaseService {
 
   async getCircutById(id: string) {
     try {
-      const user = await prisma.user.findUnique({
-        where: { clerkId: id },
+      const circut = await prisma.circut.findUnique({
+        where: { id },
       });
 
-      return user;
+      return circut;
     } catch (error) {
-      throw new Error(`Error retrieving user: ${(error as Error).message}`);
+      throw new Error(`Error retrieving circut: ${(error as Error).message}`);
     }
   }
   async getCircutByIdandOrg(id: string, orgId: string) {

@@ -5,7 +5,13 @@ import { DataTableColumnHeader } from "@repo/design-system/components/data-table
 import { CircutActions } from "./table-actions";
 import { Badge } from "@repo/design-system/components/ui/badge";
 
-export const circutTableColumns: ColumnDef<Circut>[] = [
+// updatedAt and CreatedAt are dates i am trying to convert it to stringa
+type ColumnTypes = Omit<Circut, "createdAt" | "updatedAt"> & {
+  createdAt: string;
+  updatedAt: string;
+};
+
+export const circutTableColumns: ColumnDef<ColumnTypes>[] = [
   {
     id: "select",
     header: ({ table }) => (

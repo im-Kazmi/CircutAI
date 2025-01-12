@@ -9,13 +9,17 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
+    "@hono/clerk-auth": "^2.0.0",
+    "@hono/zod-validator": "^0.4.2",
     "@repo/types": "workspace:*",
     "@types/pdf-parse": "^1.1.4",
     "csv-parser": "^3.1.0",
+    "hono-rate-limiter": "^0.4.2",
     "papaparse": "^5.5.1",
     "pdf-parse": "^1.1.1",
     "xlsx": "^0.18.5",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zod-validator": "link:@types/@hono/zod-validator"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

@@ -1,6 +1,6 @@
 import { prisma, Prisma } from "@repo/database";
 import { BaseService } from "./base-service";
-import { PaginationParams, QueryUtils, SortingParams } from "@/utils/query";
+import { PaginationParams, QueryUtils, SortingParams } from "../utils/query";
 
 export class MemoryService extends BaseService {
   list(
@@ -15,7 +15,7 @@ export class MemoryService extends BaseService {
         orgId,
       },
       include: {
-        memoryAudit: true,
+        Document: true,
       },
       skip,
       take,
@@ -25,12 +25,12 @@ export class MemoryService extends BaseService {
     return QueryUtils.paginateQuery(query, this.prisma.memory, params);
   }
 
-  async createCircut(
+  async createMemory(
     orgId: string,
-    values: Omit<Prisma.CircutCreateInput, "org">,
+    values: Omit<Prisma.MemoryCreateInput, "org">,
   ) {
     try {
-      const circut = await prisma.circut.create({
+      const memory = await prisma.memory.create({
         data: {
           ...values,
           org: {
@@ -41,71 +41,71 @@ export class MemoryService extends BaseService {
         },
       });
 
-      return circut;
+      return memory;
     } catch (error) {
-      throw new Error(`Error creating circut: ${(error as Error).message}`);
+      throw new Error(`Error creating memory: ${(error as Error).message}`);
     }
   }
 
-  async deleteCircut(orgId: string, id: string) {
+  async deleteMemory(orgId: string, id: string) {
     try {
-      const exists = await this.getCircutByIdandOrg(id, orgId);
+      const exists = await this.getMemoryByIdandOrg(id, orgId);
 
       if (!exists) {
-        throw new Error(`circut does not exists with this id.`);
+        throw new Error(`memory does not exists with this id.`);
       }
 
-      await prisma.circut.delete({
+      await prisma.memory.delete({
         where: { id, orgId },
       });
-      return { message: "circut deleted successfully" };
+      return { message: "memory deleted successfully" };
     } catch (error) {
-      throw new Error(`Error deleting circut: ${(error as Error).message}`);
+      throw new Error(`Error deleting memory: ${(error as Error).message}`);
     }
   }
 
-  async updateCircut(
+  async updateMemory(
     id: string,
     orgId: string,
-    values: Prisma.CircutUpdateInput,
+    values: Prisma.MemoryUpdateInput,
   ) {
     try {
-      const exists = await this.getCircutByIdandOrg(id, orgId);
+      const exists = await this.getMemoryByIdandOrg(id, orgId);
 
       if (!exists) {
-        throw new Error(`circut does not exists with this id.`);
+        throw new Error(`memory does not exists with this id.`);
       }
 
-      const updatedCircut = await prisma.circut.update({
+      const updatedMemory = await prisma.memory.update({
         where: { id, orgId },
         data: values,
       });
-      return updatedCircut;
+      return updatedMemory;
     } catch (error) {
-      throw new Error(`Error updating circut: ${(error as Error).message}`);
+      throw new Error(`Error updating memory: ${(error as Error).message}`);
     }
   }
 
-  async getCircutById(id: string) {
+  async getMemoryById(id: string) {
     try {
-      const user = await prisma.user.findUnique({
-        where: { clerkId: id },
+      const memory = await prisma.memory.findUnique({
+        where: { id },
       });
 
-      return user;
+      return memory;
     } catch (error) {
-      throw new Error(`Error retrieving user: ${(error as Error).message}`);
+      throw new Error(`Error retrieving memory: ${(error as Error).message}`);
     }
   }
-  async getCircutByIdandOrg(id: string, orgId: string) {
+  async getMemoryByIdandOrg(id: string, orgId: string) {
     try {
-      const circut = await prisma.circut.findUnique({
+      const memory = await prisma.memory.findUnique({
         where: { id, orgId },
       });
 
-      return circut;
+      return memory;
     } catch (error) {
-      throw new Error(`Error retrieving circut: ${(error as Error).message}`);
+      throw new Error(`Error retrieving memory: ${(error as Error).message}`);
     }
   }
 }

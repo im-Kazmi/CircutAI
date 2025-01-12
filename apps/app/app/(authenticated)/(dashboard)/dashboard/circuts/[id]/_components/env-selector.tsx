@@ -22,8 +22,6 @@ export function EnvSelector() {
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="production">PRODUCTION v1</SelectItem>
-          <SelectItem value="staging">STAGING v1</SelectItem>
-          <SelectItem value="development">DEVELOPMENT v1</SelectItem>
         </SelectContent>
       </Select>
 
