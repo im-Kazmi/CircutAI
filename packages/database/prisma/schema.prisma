@@ -15,6 +15,12 @@ enum AccountStatus {
   ACTIVE
 }
 
+enum CircutStatus {
+  DRAFT
+  DEPLOYED
+  ARCHIEVED
+}
+
 enum CircutPrivacy {
   PRIVATE
   PUBLIC
@@ -47,6 +53,7 @@ model User {
   featureSettings Json          @default("{}")
   Organization    Organization? @relation(fields: [organizationId], references: [id])
   organizationId  String?
+  Circut          Circut[]
 }
 
 model Organization {
@@ -62,57 +69,127 @@ model Organization {
   updatedAt               DateTime @updatedAt
   publicMetadata          Json     @default("{}")
 
-  users   User[]
-  circuts Circut[]
-  apiKeys APIKey[]
-  Memory  Memory[]
+  users       User[]
+  circuts     Circut[]
+  apiKeys     APIKey[]
+  Memory      Memory[]
+  Integration Integration[]
 }
 
 model Circut {
-  id          String        @id @default(cuid())
-  name        String
-  privacy     CircutPrivacy @default(PRIVATE)
-  description String?
-  orgId       String
-  org         Organization  @relation(fields: [orgId], references: [id])
-  config      Json? // Store dynamic circut configurations like apiKey, model, temperature
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  id                 String        @id @default(cuid())
+  name               String
+  apiKey             String        @default(uuid())
+  privacy            CircutPrivacy @default(PRIVATE)
+  description        String?
+  systemInstructions String        @default("You're a helpful AI assistant.")
+  orgId              String
+  createdBy          String
+  jsonMode           Boolean       @default(false)
+  moderation         Boolean       @default(true)
+  streamMode         Boolean       @default(true)
+  storeMessages      Boolean       @default(true)
+  org                Organization  @relation(fields: [orgId], references: [id])
+  user               User          @relation(fields: [createdBy], references: [clerkId])
+  config             Json? // Store dynamic circut configurations like apiKey, model, temperature
+  version            Int           @default(1)
+  status             CircutStatus  @default(DRAFT)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
 
   tools            CircutTool[]
-  memory           Memory[]
   workflows        Workflow[]
   ExecutionHistory ExecutionHistory[]
+  versions         CircutVersion[]
+  memories         CircutMemory[]
+}
+
+model CircutVersion {
+  id        String   @id @default(cuid())
+  circutId  String
+  circut    Circut   @relation(fields: [circutId], references: [id])
+  version   Int
+  config    Json
+  createdAt DateTime @default(now())
+}
+
+model Workflow {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  circutId     String
+  circut       Circut   @relation(fields: [circutId], references: [id])
+  steps        Json
+  inputSchema  Json?
+  outputSchema Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum MemorySourceType {
+  MANUAL
+  FILE
 }
 
 model Memory {
-  id          String        @id @default(cuid())
+  id          String  @id @default(cuid())
   name        String
   description String?
-  circutId    String
-  circut      Circut        @relation(fields: [circutId], references: [id])
+
+  orgId        String
+  org          Organization     @relation(fields: [orgId], references: [id])
+  embedding    Bytes
+  sourceType   MemorySourceType @default(FILE)
+  content      String // Original text/content that generated the vector
+  metadata     Json // Additional info (e.g., tags, source, timestamps)
+  relevance    Float // Relevance score for vector-based retrieval
+  confidence   Float
+  lastAccessed DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  memoryAudit  MemoryAudit[] // History of changes to memory
+  Document     Document[]
+  CircutMemory CircutMemory[]
+}
+
+model CircutMemory {
+  id       String @id @default(cuid())
+  circutId String
+  memoryId String
+  memory   Memory @relation(fields: [memoryId], references: [id])
+  circut   Circut @relation(fields: [circutId], references: [id])
+}
+
+// FOR LATER USE IF WE WANT TO ADD SOME THIRD PARTY INTEGRATIONS
+model Integration {
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  type        String // e.g., "slack", "email"
+  config      Json
   orgId       String
-  org         Organization  @relation(fields: [orgId], references: [id])
-  vectorData  Bytes
-  content     String // Original text/content that generated the vector
-  metadata    Json // Additional info (e.g., tags, source, timestamps)
-  relevance   Float // Relevance score for vector-based retrieval
-  confidence  Float
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  memoryAudit MemoryAudit[] // History of changes to memory
-  Document    Document[]
+  org         Organization @relation(fields: [orgId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+enum DocumentProcessingStatus {
+  PENDING
+  INDEXED
+  FAILED
 }
 
 model Document {
-  id                String   @id @default(cuid())
-  memoryId          String
-  memory            Memory   @relation(fields: [memoryId], references: [id])
-  fileName          String
-  fileType          String
-  fileSize          Int?
-  uploadDate        DateTime @default(now())
-  extracted_content String?
+  id               String                   @id @default(cuid())
+  memoryId         String
+  memory           Memory                   @relation(fields: [memoryId], references: [id])
+  fileName         String
+  fileType         String
+  fileSize         Int?
+  uploadDate       DateTime                 @default(now())
+  extractedContent String?
+  processingStatus DocumentProcessingStatus @default(PENDING)
+  sourceUrl        String?
 }
 
 model Tool {
@@ -135,16 +212,6 @@ model CircutTool {
   tool     Tool   @relation(fields: [toolId], references: [id])
 }
 
-model Workflow {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  circutId    String
-  circut      Circut   @relation(fields: [circutId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
 model APIKey {
   id        String       @id @default(cuid())
   orgId     String
@@ -165,11 +232,22 @@ model MemoryAudit {
 }
 
 model ExecutionHistory {
-  id          String   @id @default(cuid())
-  circutId    String
-  circut      Circut   @relation(fields: [circutId], references: [id])
-  executionId String // ID of the specific execution instance
-  input       Json // The input data passed to the circut
-  output      Json // The output data returned by the circut
-  createdAt   DateTime @default(now())
+  id            String          @id @default(cuid())
+  circutId      String
+  circut        Circut          @relation(fields: [circutId], references: [id])
+  executionId   String
+  input         Json
+  output        Json
+  duration      Int // Execution time in milliseconds
+  memoryUsage   Int?
+  apiCallsCount Int?
+  status        ExecutionStatus
+  errorMessage  String?
+  createdAt     DateTime        @default(now())
+}
+
+enum ExecutionStatus {
+  SUCCESS
+  FAILED
+  IN_PROGRESS
 }

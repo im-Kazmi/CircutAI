@@ -4,6 +4,7 @@ import {
   type ColumnDef,
   type ColumnFiltersState,
   type PaginationState,
+  Row,
   type SortingState,
   flexRender,
   getCoreRowModel,
@@ -28,6 +29,7 @@ export * from "@tanstack/react-table";
 
 export type DataTableProps<TData, TValue> = {
   isLoading?: boolean;
+  onItemClick?: (item: Row<TData>) => void;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterableColumns?: {
@@ -42,6 +44,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   filterableColumns = [],
+  onItemClick,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -112,7 +115,8 @@ export function DataTable<TData, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className="h-32"
+                    className="h-32 cursor-pointer"
+                    onClick={() => onItemClick?.(row)}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id}>
