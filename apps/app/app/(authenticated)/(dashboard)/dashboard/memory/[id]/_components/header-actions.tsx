@@ -6,12 +6,12 @@ import { Brain, Settings2, Waypoints } from "lucide-react";
 export function HeaderActions() {
   const [view, setView] = useUrlState("view", {});
   return (
-    <div className="flex w-full items-center gap-2 px-4 py-2 border-b bg-background/95 min-w-full backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="flex w-full items-center gap-2 px-4 py-2 border-b  min-w-full">
       <Button
         onClick={() => setView("memory")}
         variant="ghost"
         size="sm"
-        className={cn("gap-2", view === "memory" && "bg-muted")}
+        className={cn("gap-2", (view === "memory" || !view) && "bg-muted")}
       >
         <Brain className="h-4 w-4 text-neutral-600" />
         Memory

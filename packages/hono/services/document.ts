@@ -1,14 +1,22 @@
 import { prisma, Prisma } from "@repo/database";
 import { BaseService } from "./base-service";
 import { PaginationParams, QueryUtils, SortingParams } from "../utils/query";
+import { memoryService } from "services";
 
 export class DocumentService extends BaseService {
-  list(
-    params: PaginationParams & SortingParams<keyof Prisma.DocumentSelect>,
+  async list(
     memoryId: string,
+    orgId: string,
+    params: PaginationParams & SortingParams<keyof Prisma.DocumentSelect>,
   ) {
     const { skip, take } = QueryUtils.getPaginationParams(params);
     const orderBy = QueryUtils.getSortingParams(params);
+
+    const memory = await memoryService.getMemoryByIdandOrg(memoryId, orgId);
+
+    if (!memory) {
+      throw new Error("cannot find memory with this id and org.");
+    }
 
     const query = this.prisma.document.findMany({
       where: {
@@ -23,10 +31,17 @@ export class DocumentService extends BaseService {
   }
 
   async createDocument(
+    orgId: string,
     memoryId: string,
     values: Omit<Prisma.DocumentCreateInput, "org">,
   ) {
     try {
+      const memory = await memoryService.getMemoryByIdandOrg(memoryId, orgId);
+
+      if (!memory) {
+        throw new Error("cannot find memory with this id and org.");
+      }
+
       const document = await prisma.document.create({
         data: {
           ...values,
@@ -44,8 +59,14 @@ export class DocumentService extends BaseService {
     }
   }
 
-  async deleteDocument(memoryId: string, id: string) {
+  async deleteDocument(memoryId: string, orgId: string, id: string) {
     try {
+      const memory = await memoryService.getMemoryByIdandOrg(memoryId, orgId);
+
+      if (!memory) {
+        throw new Error("cannot find memory with this id and org.");
+      }
+
       const exists = await this.getDocumentByIdandMemory(id, memoryId);
 
       if (!exists) {
@@ -64,9 +85,16 @@ export class DocumentService extends BaseService {
   async updateDocument(
     id: string,
     memoryId: string,
+    orgId: string,
     values: Prisma.DocumentUpdateInput,
   ) {
     try {
+      const memory = await memoryService.getMemoryByIdandOrg(memoryId, orgId);
+
+      if (!memory) {
+        throw new Error("cannot find memory with this id and org.");
+      }
+
       const exists = await this.getDocumentByIdandMemory(id, memoryId);
 
       if (!exists) {

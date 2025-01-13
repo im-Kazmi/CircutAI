@@ -15,7 +15,7 @@ import {
 
 export function Playground() {
   return (
-    <div className="border-t bg-muted/10">
+    <div className=" bg-muted/10">
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-2">
           <Play className="h-4 w-4" />

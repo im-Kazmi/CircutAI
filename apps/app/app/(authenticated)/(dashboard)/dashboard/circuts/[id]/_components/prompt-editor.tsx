@@ -16,7 +16,7 @@ export function PromptEditor() {
   const [messageType, setMessageType] = useState<"user" | "assistant">("user");
 
   return (
-    <Card className="rounded-xl border-none shadow-none">
+    <Card className="rounded-xl border-none shadow-none px-5 bg-white/50">
       <CardHeader className="flex flex-row items-center gap-4 px-0">
         <div className="flex-1">
           <CardTitle className="flex items-center gap-2 text-lg font-medium">

@@ -3,7 +3,7 @@ import { Code, Play, Coins, GitForkIcon } from "lucide-react";
 
 export function HeaderActions() {
   return (
-    <div className="flex items-center gap-2 px-4 py-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="flex items-center gap-2 px-4 py-2 border-b ">
       <Button variant="ghost" size="sm" className="gap-2">
         <Code className="h-4 w-4" />
         Code

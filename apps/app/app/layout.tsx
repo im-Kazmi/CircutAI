@@ -5,6 +5,7 @@ import { QueryProvider } from "@repo/react-query/providers/query-provider";
 import type { ReactNode } from "react";
 import DialogProvider from "./providers/dialog-provider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { SheetProvider } from "./providers/sheet-provider";
 
 type RootLayoutProperties = {
   readonly children: ReactNode;
@@ -16,6 +17,7 @@ const RootLayout = ({ children }: RootLayoutProperties) => (
       <body>
         <DesignSystemProvider>
           <DialogProvider />
+          <SheetProvider />
           <NuqsAdapter>{children}</NuqsAdapter>
         </DesignSystemProvider>
       </body>
