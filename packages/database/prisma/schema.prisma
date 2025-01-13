@@ -137,22 +137,23 @@ model Memory {
   name        String
   description String
 
-  orgId        String
-  createdBy    String
-  user         User             @relation(fields: [createdBy], references: [clerkId])
-  org          Organization     @relation(fields: [orgId], references: [id])
-  embedding    Bytes?
-  sourceType   MemorySourceType @default(FILE)
-  content      String? // Original text/content that generated the vector
-  metadata     Json? // Additional info (e.g., tags, source, timestamps)
-  relevance    Float? // Relevance score for vector-based retrieval
-  confidence   Float?
-  lastAccessed DateTime?
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
-  memoryAudit  MemoryAudit[] // History of changes to memory
-  documents    Document[]
-  CircutMemory CircutMemory[]
+  orgId          String
+  createdBy      String
+  user           User             @relation(fields: [createdBy], references: [clerkId])
+  org            Organization     @relation(fields: [orgId], references: [id])
+  embedding      Bytes?
+  embeddingModel LLMType
+  sourceType     MemorySourceType @default(FILE)
+  content        String? // Original text/content that generated the vector
+  metadata       Json? // Additional info (e.g., tags, source, timestamps)
+  relevance      Float? // Relevance score for vector-based retrieval
+  confidence     Float?
+  lastAccessed   DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  memoryAudit    MemoryAudit[] // History of changes to memory
+  documents      Document[]
+  CircutMemory   CircutMemory[]
 }
 
 model CircutMemory {

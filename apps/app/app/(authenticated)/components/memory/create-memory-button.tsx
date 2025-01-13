@@ -4,12 +4,12 @@ import Link from "next/link";
 import { TextureButton } from "@repo/design-system/components/ui/texture-button";
 import { PlusCircle } from "lucide-react";
 
-export const CreateCircutButton = () => {
+export const CreateMemoryButton = () => {
   return (
     <Protect condition={(has) => has({ role: "org:admin" })}>
-      <Link href={"/dashboard/circuts/new"}>
+      <Link href={"/dashboard/memory/new"}>
         <TextureButton variant="secondary">
-          <PlusCircle className="mr-2" /> Create circut
+          <PlusCircle className="mr-2" /> Create Memory
         </TextureButton>
       </Link>
     </Protect>

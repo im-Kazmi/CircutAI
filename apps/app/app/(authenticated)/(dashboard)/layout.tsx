@@ -37,7 +37,7 @@ const AppLayout = ({ children }: AppLayoutProperties) => {
   return (
     <SidebarProvider>
       <GlobalSidebar>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0 bg-muted/50">
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0 bg-muted/50 dark:bg-transparent">
           <div className="min-h-[100vh]  my-5 rounded-2xl flex-1  md:min-h-min p-5">
             {children}
           </div>

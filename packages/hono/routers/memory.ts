@@ -8,11 +8,23 @@ import { z } from "zod";
 
 export const createMemoryForm = z.object({
   name: z.string().min(2, {
-    message: "memroy name must be at least 2 characters.",
+    message: "memory name must be at least 2 characters.",
   }),
   description: z.string(),
+  embeddingModel: z.enum([
+    "ANTHROPIC",
+    "OPENAI",
+    "MISTRAL",
+    "TOGETHER",
+    "GROQ",
+    "GOOGLE",
+    "COHERE",
+    "FIREWORKS",
+    "PERPLEXITY",
+    "DEEPSEEK",
+    "XAI",
+  ]),
 });
-
 const app = new Hono()
   .use(clerkMiddleware())
   .use(memoryHonoService.middleware("memoryService"))
@@ -63,7 +75,7 @@ const app = new Hono()
     return c.json(memory, 200);
   })
   .post("/", zValidator("json", createMemoryForm), async (c) => {
-    const memoryService = c.get("memoryService");
+    const memoryService = c.var.memoryService;
 
     const auth = getAuth(c);
 

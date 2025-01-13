@@ -1,3 +1,4 @@
-export * from "./src/api";
-export * from "./src/enums";
-export * from "./src/models";
+export * from "./api";
+export * from "./enums";
+export * from "./models";
+export * from "./zod-schemas";

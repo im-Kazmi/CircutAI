@@ -1,5 +1,5 @@
-'use client';
-import {} from '@repo/config';
+"use client";
+import {} from "@repo/config";
 
 const App = () => {
   return (

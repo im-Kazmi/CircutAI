@@ -167,7 +167,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
   const queryClient = useQueryClient();
   return (
     <>
-      <Sidebar variant="inset">
+      <Sidebar variant="floating" className="bg-muted">
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
