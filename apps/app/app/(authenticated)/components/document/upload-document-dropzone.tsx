@@ -1,17 +1,11 @@
-import { CloudUpload, File, Loader2, X } from "lucide-react";
+import { CloudUpload, File, X } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@repo/design-system/components/ui/button";
-import { DataTable } from "@repo/design-system/components/data-table";
-import { Separator } from "@repo/design-system/components/ui/separator";
-import { DocumentsTable } from "./document-table";
 import { useUploadDocument } from "@repo/features/document";
 
 export const UploadDocumentDropzone = ({ memoryId }: { memoryId: string }) => {
-  console.log(memoryId);
   const [files, setFiles] = useState<File[]>([]);
-  const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
 
   const mutation = useUploadDocument();
 
@@ -33,7 +27,6 @@ export const UploadDocumentDropzone = ({ memoryId }: { memoryId: string }) => {
   };
 
   const handleUpload = () => {
-    setUploading(true);
     mutation.mutate(
       {
         memoryId,
@@ -41,15 +34,18 @@ export const UploadDocumentDropzone = ({ memoryId }: { memoryId: string }) => {
           fileName: f.name,
           fileType: f.type,
           fileSize: f.size,
+          filePath: f.webkitRelativePath,
         })),
       },
       {
         onSuccess: () => {
           alert("files uploaded successfully");
+          setFiles([]);
         },
       },
     );
   };
+
   return (
     <div>
       <div
@@ -93,8 +89,8 @@ export const UploadDocumentDropzone = ({ memoryId }: { memoryId: string }) => {
               </li>
             ))}
           </ul>
-          <Button onClick={handleUpload} disabled={uploading}>
-            {uploading ? "Uploading..." : "Upload Files"}
+          <Button onClick={handleUpload} disabled={mutation.isPending}>
+            {mutation.isPending ? "Uploading..." : "Upload Files"}
           </Button>
         </div>
       )}

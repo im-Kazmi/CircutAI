@@ -29,9 +29,9 @@ export const documentTableColumns: ColumnDef<ColumnTypes>[] = [
     // enableHiding: false,
   },
   {
-    accessorKey: "filename",
+    accessorKey: "fileName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="filename" />
+      <DataTableColumnHeader column={column} title="fileName" />
     ),
   },
   {

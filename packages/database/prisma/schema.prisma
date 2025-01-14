@@ -189,6 +189,7 @@ model Document {
   memory           Memory                   @relation(fields: [memoryId], references: [id])
   fileName         String
   fileType         String
+  filePath         String
   fileSize         Int?
   uploadDate       DateTime                 @default(now())
   extractedContent String?

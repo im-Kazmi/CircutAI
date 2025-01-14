@@ -13,6 +13,8 @@ export const DocumentsTable = ({ memoryId }: Props) => {
       isLoading={isLoading}
       data={data?.data || []}
       columns={documentTableColumns}
+      columnStyles="h-10 "
+      searchableColumnName="fileName"
     />
   );
 };

@@ -25,11 +25,14 @@ import {
 } from "../ui/table";
 import { DataTablePagination } from "./pagination";
 import { DataTableToolbar } from "./toolbar";
+import { cn } from "@repo/design-system/lib/utils";
 export * from "@tanstack/react-table";
 
 export type DataTableProps<TData, TValue> = {
   isLoading?: boolean;
+  columnStyles?: string;
   onItemClick?: (item: Row<TData>) => void;
+  searchableColumnName?: string;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterableColumns?: {
@@ -43,8 +46,10 @@ export function DataTable<TData, TValue>({
   isLoading = false,
   columns,
   data,
+  searchableColumnName,
   filterableColumns = [],
   onItemClick,
+  columnStyles,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -77,7 +82,11 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} filterableColumns={filterableColumns} />
+      <DataTableToolbar
+        searchableColumnName={searchableColumnName}
+        table={table}
+        filterableColumns={filterableColumns}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -115,7 +124,7 @@ export function DataTable<TData, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
-                    className="h-32 cursor-pointer"
+                    className={cn("h-32 cursor-pointer", columnStyles)}
                     onClick={() => onItemClick?.(row)}
                   >
                     {row.getVisibleCells().map((cell) => (

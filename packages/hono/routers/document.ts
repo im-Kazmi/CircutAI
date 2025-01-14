@@ -12,6 +12,7 @@ export const createDocumentSchema = z.object({
       fileName: z.string(),
       fileType: z.string(),
       fileSize: z.number().optional(),
+      filePath: z.string(),
     }),
   ),
 });
@@ -20,7 +21,7 @@ const app = new Hono()
   .use(clerkMiddleware())
   .use(documentHonoService.middleware("documentService"))
   .get(
-    "/list",
+    "/:memoryId/list",
     zValidator("query", sortingAndPaginationSchema),
     zValidator("param", z.object({ memoryId: z.string() })),
     async (c) => {
@@ -42,7 +43,7 @@ const app = new Hono()
       const memories = await documentService.list(memoryId, auth.orgId!, {
         page: page ? Number.parseInt(page, 10) : 1,
         pageSize: pageSize ? Number.parseInt(pageSize, 10) : 10,
-        sortBy: sortBy ? (sortBy as keyof Document) : "uploadDate",
+        sortBy: sortBy ? (sortBy as keyof Document) : "fileType",
         sortOrder: sortOrder ? sortOrder : "desc",
       });
 

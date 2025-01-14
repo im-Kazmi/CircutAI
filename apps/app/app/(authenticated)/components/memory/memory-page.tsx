@@ -10,7 +10,6 @@ import { DocumentsTable } from "../document/document-table";
 import { UploadDocumentDropzone } from "../document/upload-document-dropzone";
 
 export const MemoryPage = ({ memoryId }: { memoryId: string }) => {
-  console.log("memory page id = ", memoryId);
   return (
     <div className="w-full max-w-4xl mx-auto p-6 space-y-8">
       <div className="grid md:grid-cols-2 gap-8">

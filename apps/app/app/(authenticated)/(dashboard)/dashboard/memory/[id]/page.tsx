@@ -8,7 +8,6 @@ type Props = {
 
 const Page = async ({ params }: Props) => {
   const { id } = await params;
-  console.log("id = ", id);
   return (
     <>
       <ClientPage id={id} />

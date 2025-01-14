@@ -74,12 +74,18 @@ importers:
       '@repo/seo':
         specifier: workspace:*
         version: link:../../packages/seo
+      '@repo/storage':
+        specifier: workspace:*
+        version: link:../../packages/storage
       '@repo/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/tailwind-config
       '@repo/types':
         specifier: workspace:*
         version: link:../../packages/types
+      '@repo/uploadthing':
+        specifier: workspace:*
+        version: link:../../packages/uploadthing
       '@repo/webhooks':
         specifier: workspace:*
         version: link:../../packages/webhooks
@@ -109,7 +115,7 @@ importers:
         version: 0.4.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       nuqs:
         specifier: ^2.2.3
-        version: 2.2.3(next@15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
+        version: 2.2.3(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)
       quirrel:
         specifier: ^1.14.1
         version: 1.14.1(@types/ioredis-mock@8.2.5)(bufferutil@4.0.8)
@@ -667,6 +673,9 @@ importers:
       '@hono/zod-validator':
         specifier: ^0.4.2
         version: 0.4.2(hono@4.6.13)(zod@3.23.8)
+      '@repo/storage':
+        specifier: workspace:*
+        version: link:../storage
       '@repo/types':
         specifier: workspace:*
         version: link:../types
@@ -679,12 +688,18 @@ importers:
       hono-rate-limiter:
         specifier: ^0.4.2
         version: 0.4.2(hono@4.6.13)
+      mime-types:
+        specifier: ^2.1.35
+        version: 2.1.35
       papaparse:
         specifier: ^5.5.1
         version: 5.5.1
       pdf-parse:
         specifier: ^1.1.1
         version: 1.1.1
+      quirrel:
+        specifier: ^1.14.1
+        version: 1.14.1(@types/ioredis-mock@8.2.5)(bufferutil@4.0.8)
       xlsx:
         specifier: ^0.18.5
         version: 0.18.5
@@ -698,6 +713,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@types/mime-types':
+        specifier: ^2.1.4
+        version: 2.1.4
       '@types/node':
         specifier: 22.10.1
         version: 22.10.1
@@ -951,6 +969,8 @@ importers:
         version: 22.10.1
 
   packages/typescript-config: {}
+
+  packages/uploadthing: {}
 
   packages/webhooks:
     dependencies:
@@ -3437,6 +3457,9 @@ packages:
 
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
+
+  '@types/mime-types@2.1.4':
+    resolution: {integrity: sha512-lfU4b34HOri+kAY5UheuFMWPDOI+OPceBSHZKp69gEyTL/mmJ4cnU6Y/rlme3UL3GyOn6Y42hyIEw0/q8sWx5w==}
 
   '@types/minimatch@5.1.2':
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
@@ -10107,6 +10130,8 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
 
+  '@types/mime-types@2.1.4': {}
+
   '@types/minimatch@5.1.2': {}
 
   '@types/ms@0.7.34': {}
@@ -12751,7 +12776,7 @@ snapshots:
     dependencies:
       path-key: 3.1.1
 
-  nuqs@2.2.3(next@15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0):
+  nuqs@2.2.3(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0):
     dependencies:
       mitt: 3.0.1
       react: 19.0.0

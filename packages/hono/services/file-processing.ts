@@ -1,18 +1,21 @@
-import { readFileSync } from "fs";
+import { promises as fsPromises, createReadStream } from "fs";
 import * as pdfParse from "pdf-parse";
 import * as csv from "csv-parser";
 import * as XLSX from "xlsx";
-import * as fs from "fs";
+import { lookup } from "mime-types";
 
 export class FileProcessingService {
-  async processFile(filePath: string, fileType: string) {
+  async processFile(filePath: string): Promise<string> {
     try {
+      const fileType = lookup(filePath);
+      if (!fileType) throw new Error("Unable to detect file type.");
+
       switch (fileType) {
         case "text/plain":
-          return this.processTextFile(filePath);
+          return this.readFile(filePath);
 
         case "text/markdown":
-          return this.processMarkdownFile(filePath);
+          return this.readFile(filePath);
 
         case "application/pdf":
           return this.processPDF(filePath);
@@ -26,7 +29,7 @@ export class FileProcessingService {
 
         case "application/javascript":
         case "text/x-python":
-          return this.processCodeFile(filePath);
+          return this.readFile(filePath);
 
         default:
           throw new Error(`Unsupported file type: ${fileType}`);
@@ -36,31 +39,17 @@ export class FileProcessingService {
     }
   }
 
-  private async processTextFile(filePath: string): Promise<string> {
+  private async readFile(filePath: string): Promise<string> {
     try {
-      const text = readFileSync(filePath, "utf-8");
-      return text;
+      return await fsPromises.readFile(filePath, "utf-8");
     } catch (error) {
-      throw new Error(
-        `Error processing text file: ${(error as Error).message}`,
-      );
-    }
-  }
-
-  private async processMarkdownFile(filePath: string): Promise<string> {
-    try {
-      const markdown = readFileSync(filePath, "utf-8");
-      return markdown;
-    } catch (error) {
-      throw new Error(
-        `Error processing markdown file: ${(error as Error).message}`,
-      );
+      throw new Error(`Error reading file: ${(error as Error).message}`);
     }
   }
 
   private async processPDF(filePath: string): Promise<string> {
     try {
-      const dataBuffer = readFileSync(filePath);
+      const dataBuffer = await fsPromises.readFile(filePath);
       const pdfData = await pdfParse(dataBuffer);
       return pdfData.text;
     } catch (error) {
@@ -72,12 +61,12 @@ export class FileProcessingService {
     try {
       const rows: Record<string, string>[] = [];
       return new Promise((resolve, reject) => {
-        fs.createReadStream(filePath)
+        createReadStream(filePath)
           .pipe(csv())
           .on("data", (row) => rows.push(row))
           .on("end", () => resolve(JSON.stringify(rows)))
           .on("error", (error) =>
-            reject(`Error processing CSV file: ${error}`),
+            reject(new Error(`Error processing CSV file: ${error.message}`)),
           );
       });
     } catch (error) {
@@ -94,17 +83,6 @@ export class FileProcessingService {
     } catch (error) {
       throw new Error(
         `Error processing Excel file: ${(error as Error).message}`,
-      );
-    }
-  }
-
-  private async processCodeFile(filePath: string): Promise<string> {
-    try {
-      const code = readFileSync(filePath, "utf-8");
-      return code;
-    } catch (error) {
-      throw new Error(
-        `Error processing code file: ${(error as Error).message}`,
       );
     }
   }

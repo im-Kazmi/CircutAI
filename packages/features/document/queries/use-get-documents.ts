@@ -3,7 +3,7 @@ import type { InferResponseType } from "@repo/hono";
 import { useQuery } from "@repo/react-query";
 
 type ResponseType = InferResponseType<
-  typeof client.api.document.list.$get,
+  (typeof client.api.document)[":memoryId"]["list"]["$get"],
   200
 >;
 
@@ -11,7 +11,7 @@ export const useGetDocuments = (memoryId: string) => {
   const query = useQuery<ResponseType>({
     queryKey: ["document", { memoryId }],
     queryFn: async () => {
-      const res = await client.api.document.list.$get({
+      const res = await client.api.document[":memoryId"].list.$get({
         query: {},
         param: { memoryId },
       });

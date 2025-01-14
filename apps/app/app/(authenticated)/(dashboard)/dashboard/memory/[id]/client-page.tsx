@@ -16,7 +16,6 @@ export const ClientPage = ({ id }: Props) => {
   const { data, isLoading, isPending } = useGetMemory(id);
   const [view] = useUrlState("view", {});
 
-  console.log("client page id = ", id);
   return (
     <div className="flex min-h-screen w-full ">
       <ShadowWrapper>
