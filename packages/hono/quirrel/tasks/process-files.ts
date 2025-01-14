@@ -3,29 +3,27 @@ import { prisma } from "@repo/database";
 import { FileProcessingService } from "services/file-processing";
 
 interface FileProcessingPayload {
-  documentId: string;
-  memoryId: string;
+  documentUrl: string;,
+  fileSize:number,
+  fileType:string,
+  fileName:string,
+
 }
 export const fileProcessingQueue = Queue(
   "api/queues/email",
   async (payload: FileProcessingPayload) => {
-    const { documentId, memoryId } = payload;
-
-    const document = await prisma.document.findUnique({
-      where: { id: documentId },
-    });
-
-    if (!document) {
-      throw new Error(`Document with ID ${documentId} not found`);
-    }
-
+    const { documentUrl } = payload;
     const fileProcessor = new FileProcessingService();
-    const processedContent = await fileProcessor.processFile(document);
+    const processedContent = await fileProcessor.processFile(documentUrl);
 
-    // Update the document with processed content
-    await prisma.document.update({
-      where: { id: documentId },
-      data: { extractedContent: processedContent },
+    await prisma.document.create({
+      data: {
+        extractedContent: processedContent,
+        fileName:payload.fileName,
+        fileType:payload.fileType,
+        fileSize:payload.fileSize,
+        filePath:payload.documentUrl,
+      },
     });
   },
 );
