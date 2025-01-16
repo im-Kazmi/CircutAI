@@ -4,17 +4,13 @@ import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
+import axios from "axios";
+import { uploadAndProcessDocument } from "src/trigger/example";
+import { v4 as uuid } from "uuid";
 
 export const createDocumentSchema = z.object({
   memoryId: z.string(),
-  files: z.array(
-    z.object({
-      fileName: z.string(),
-      fileType: z.string(),
-      fileSize: z.number().optional(),
-      filePath: z.string(),
-    }),
-  ),
+  files: z.array(z.instanceof(File)),
 });
 
 const app = new Hono()
@@ -71,8 +67,7 @@ const app = new Hono()
     );
     return c.json(memory, 200);
   })
-  .post("/", zValidator("json", createDocumentSchema), async (c) => {
-    const documentService = c.var.documentService;
+  .post("/", async (c) => {
     const auth = getAuth(c);
 
     if (!auth?.userId) {
@@ -84,27 +79,51 @@ const app = new Hono()
       );
     }
 
-    const values = c.req.valid("json");
+    const formData = await c.req.formData();
+    const parsedBody = await c.req.parseBody();
+    const blob = await c.req.blob();
+    console.log("Content-Type:", c.req.header("content-type"));
+    const memoryId = formData.get("memoryId") as string;
+    const files = formData.getAll("files") as unknown as File[];
 
-    let uploadedDocuments: any = [];
+    console.log("formData = ", formData);
+    console.log("parsedBody = ", parsedBody);
+    console.log("blob = ", blob);
+    console.log("memoryId = ", memoryId);
+    console.log("files = ", files);
+    console.log("1st file = ", files[0]);
 
-    for (const doc of values.files) {
-      const uploaded = await documentService.createDocument(
-        auth.orgId!,
-        values.memoryId,
-        {
-          ...doc,
-          memory: {
-            connect: {
-              id: values.memoryId,
-            },
-          },
-        },
-      );
-      uploadedDocuments.push(uploaded);
+    if (files.length === 0) {
+      return c.json({ error: "No files uploaded" }, 400);
     }
 
-    return c.json(uploadedDocuments, 200);
+    try {
+      const serializedFiles = await Promise.all(
+        files.map(async (file) => ({
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          lastModified: file.lastModified,
+          content: await file
+            .arrayBuffer()
+            .then((buffer) => Array.from(new Uint8Array(buffer))),
+        })),
+      );
+
+      const taskResult = await uploadAndProcessDocument.trigger({
+        files: serializedFiles,
+        memoryId,
+        userId: auth.userId,
+        orgId: auth.orgId!,
+      });
+
+      //You can use the handle to check the status of the task, cancel and retry it.
+      console.log("Task is running with handle", taskResult.id);
+      return c.json("triggerted");
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      return c.json({ error: "Failed to upload one or more files" }, 500);
+    }
   });
 
 export default app;

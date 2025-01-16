@@ -189,11 +189,12 @@ model Document {
   memory           Memory                   @relation(fields: [memoryId], references: [id])
   fileName         String
   fileType         String
-  filePath         String
+  fileUrl          String
   fileSize         Int?
   uploadDate       DateTime                 @default(now())
   extractedContent String?
   processingStatus DocumentProcessingStatus @default(PENDING)
+  filePath         String?
   sourceUrl        String?
 }
 

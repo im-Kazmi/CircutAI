@@ -1,7 +1,6 @@
 import { promises as fsPromises, createReadStream } from "fs";
-import * as pdfParse from "pdf-parse";
-import * as csv from "csv-parser";
-import * as XLSX from "xlsx";
+import csv from "csv-parser";
+import XLSX from "xlsx";
 import { lookup } from "mime-types";
 
 export class FileProcessingService {
@@ -44,16 +43,6 @@ export class FileProcessingService {
       return await fsPromises.readFile(filePath, "utf-8");
     } catch (error) {
       throw new Error(`Error reading file: ${(error as Error).message}`);
-    }
-  }
-
-  private async processPDF(filePath: string): Promise<string> {
-    try {
-      const dataBuffer = await fsPromises.readFile(filePath);
-      const pdfData = await pdfParse(dataBuffer);
-      return pdfData.text;
-    } catch (error) {
-      throw new Error(`Error processing PDF file: ${(error as Error).message}`);
     }
   }
 

@@ -1,7 +1,7 @@
 import { prisma, Prisma } from "@repo/database";
 import { BaseService } from "./base-service";
 import { PaginationParams, QueryUtils, SortingParams } from "../utils/query";
-import { memoryService } from "services";
+import { memoryService, r2 } from "services";
 
 export class DocumentService extends BaseService {
   async list(
@@ -33,7 +33,7 @@ export class DocumentService extends BaseService {
   async createDocument(
     orgId: string,
     memoryId: string,
-    values: Omit<Prisma.DocumentCreateInput, "org">,
+    values: Omit<Prisma.DocumentCreateInput, "memory">,
   ) {
     try {
       const memory = await memoryService.getMemoryByIdandOrg(memoryId, orgId);
@@ -41,7 +41,6 @@ export class DocumentService extends BaseService {
       if (!memory) {
         throw new Error("cannot find memory with this id and org.");
       }
-
       const document = await prisma.document.create({
         data: {
           ...values,

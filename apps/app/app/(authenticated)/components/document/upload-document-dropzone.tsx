@@ -2,12 +2,11 @@ import { CloudUpload, File, X } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Button } from "@repo/design-system/components/ui/button";
-import { useUploadDocument } from "@repo/features/document";
+import axios from "axios";
 
 export const UploadDocumentDropzone = ({ memoryId }: { memoryId: string }) => {
   const [files, setFiles] = useState<File[]>([]);
-
-  const mutation = useUploadDocument();
+  const [isUploading, setIsUploading] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
@@ -26,24 +25,42 @@ export const UploadDocumentDropzone = ({ memoryId }: { memoryId: string }) => {
     setFiles((prevFiles) => prevFiles.filter((f) => f !== file));
   };
 
-  const handleUpload = () => {
-    mutation.mutate(
-      {
-        memoryId,
-        files: files.map((f) => ({
-          fileName: f.name,
-          fileType: f.type,
-          fileSize: f.size,
-          filePath: f.webkitRelativePath,
-        })),
-      },
-      {
-        onSuccess: () => {
-          alert("files uploaded successfully");
-          setFiles([]);
+  const handleUpload = async () => {
+    if (files.length === 0) {
+      alert("Please select at least one file to upload.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("memoryId", memoryId);
+
+    files.forEach((file) => {
+      formData.append("files", file);
+    });
+
+    console.log("FormData Debug:");
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
+    setIsUploading(true);
+
+    try {
+      const response = await axios.post("/api/document", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
         },
-      },
-    );
+      });
+
+      alert("Files uploaded successfully");
+      console.log("Upload Response:", response.data);
+      setFiles([]);
+    } catch (error) {
+      console.error("Upload Error:", error);
+      alert("Failed to upload files. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -89,8 +106,8 @@ export const UploadDocumentDropzone = ({ memoryId }: { memoryId: string }) => {
               </li>
             ))}
           </ul>
-          <Button onClick={handleUpload} disabled={mutation.isPending}>
-            {mutation.isPending ? "Uploading..." : "Upload Files"}
+          <Button onClick={handleUpload} disabled={isUploading}>
+            {isUploading ? "Uploading..." : "Upload Files"}
           </Button>
         </div>
       )}
