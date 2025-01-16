@@ -1,6 +1,11 @@
 import { logger, task } from "@trigger.dev/sdk/v3";
-import { getFileUrl, uploadFileToBucket } from "services/file-upload";
-import axios from "axios";
+import { getFileUrl, uploadFileToBucket } from "../../services/file-upload";
+import { FileProcessingService } from "../../services/file-processing";
+import { PineconeService } from "../../services/pinecone";
+import { documentService } from "services";
+import { Logger } from "@trigger.dev/sdk";
+import { chunkText } from "helpers/file-processing";
+import { randomUUID } from "crypto";
 
 export type SerializedFile = {
   name: string;
@@ -22,34 +27,108 @@ export const uploadAndProcessDocument = task({
   maxDuration: 300,
   run: async (payload: DocumentProcessingPayload, { ctx }) => {
     const { files, memoryId, userId, orgId } = payload;
+    const fileProcessingService = new FileProcessingService();
+    const pineconeService = new PineconeService();
+
+    if (!files || files.length === 0) {
+      logger.error("No files provided for processing");
+      return;
+    }
+
+    if (!memoryId || !userId || !orgId) {
+      logger.error("Missing required fields: memoryId, userId, or orgId");
+      return;
+    }
 
     for (const file of files) {
+      if (file.size > 10 * 1024 * 1024) {
+        logger.error(`File too large: ${file.name}`);
+        continue;
+      }
+
+      if (!["text/plain", "application/pdf"].includes(file.type)) {
+        logger.error(`Unsupported file type: ${file.name}`);
+        continue;
+      }
+
       try {
         const uploadedFile = await uploadFileToBucket(file);
 
-        // Create document record
-        // const document = await documentService.createDocument(orgId, memoryId, {
-        //   fileName: file.name,
-        //   fileType: file.type,
-        //   fileSize: file.size,
-        //   fileUrl,
-        // });
+        if (!uploadedFile || !uploadedFile.Key) {
+          logger.error(`File upload failed for: ${file.name}`);
+          return;
+        }
 
-        // Generate embeddings
-        // const embeddings = await generateEmbeddings(chunks);
+        const fileUrl = await getFileUrl({ key: uploadedFile.Key! });
 
-        // Store embeddings in Pinecone
-        // await storeEmbeddings(embeddings, document.id);
+        const document = await documentService.createDocument(orgId, memoryId, {
+          fileName: file.name,
+          fileType: file.type,
+          fileSize: file.size,
+          fileUrl,
+        });
 
-        // Update document status
-        // await documentService.updateStatus(document.id, "processed");
+        const fileContent = await fileProcessingService.processFile(
+          fileUrl,
+          file.name,
+        );
 
-        // logger.info(`Document processed successfully: ${document.id}`);
+        const chunks = chunkText(fileContent);
+
+        const embeddingData = chunks.map((chunk, index) => ({
+          text: chunk,
+          metadata: {
+            documentId: document.id,
+            chunkIndex: index,
+            fileName: file.name,
+          },
+        }));
+
+        const embeddingsResponse =
+          await pineconeService.generateEmbeddings(embeddingData);
+
+        if (!embeddingsResponse || !embeddingsResponse.data) {
+          logger.error("Failed to generate embeddings", { file: file.name });
+          return;
+        }
+
+        const embeddings = embeddingsResponse?.data;
+
+        const data = embeddings?.map((embedding) => ({
+          id: document.id,
+          values: embedding.values!,
+        }));
+
+        if (!data || !data.values) {
+          console.log("there is no embedding data");
+          return;
+        }
+
+        await pineconeService.storeEmbeddings(
+          {
+            embeddings: data,
+            memoryId,
+            metadata: {
+              documentId: document.id,
+              memoryId,
+            },
+          },
+          document.id,
+        );
+
+        await documentService.updateStatus(document.id, "INDEXED");
+
+        logger.info(`Document processed successfully: ${document.id}`);
+        return fileContent;
       } catch (error) {
-        logger.error(`Error processing document: ${file.name}`);
+        logger.error(
+          `Error processing file: ${file.name}, memoryId: ${memoryId}, orgId: ${orgId}`,
+          {
+            error: error instanceof Error ? error.message : error,
+            stack: error instanceof Error ? error.stack : undefined,
+          },
+        );
       }
     }
-
-    return { files, memoryId, userId, orgId };
   },
 });

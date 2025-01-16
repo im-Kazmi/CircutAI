@@ -676,6 +676,9 @@ importers:
       '@hono/zod-validator':
         specifier: ^0.4.2
         version: 0.4.2(hono@4.6.13)(zod@3.23.8)
+      '@pinecone-database/pinecone':
+        specifier: ^4.1.0
+        version: 4.1.0
       '@repo/types':
         specifier: workspace:*
         version: link:../types
@@ -703,6 +706,9 @@ importers:
       node-cloudflare-r2:
         specifier: ^0.4.1
         version: 0.4.1
+      openai:
+        specifier: ^4.78.1
+        version: 4.78.1(zod@3.23.8)
       papaparse:
         specifier: ^5.5.1
         version: 5.5.1
@@ -2444,6 +2450,10 @@ packages:
     engines: {node: '>=14'}
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
+
+  '@pinecone-database/pinecone@4.1.0':
+    resolution: {integrity: sha512-WoVsbvmCgvZfjm/nCasJXuQ/tw0es5BpedLHvRScAm6xJ/nL07s3B0TrsM8m8rACTiUgbdYsdLY1W6cEBhS9xA==}
+    engines: {node: '>=18.0.0'}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -10199,6 +10209,8 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.26.0(@opentelemetry/api@1.9.0)
 
+  '@pinecone-database/pinecone@4.1.0': {}
+
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
@@ -12114,12 +12126,10 @@ snapshots:
     dependencies:
       '@types/node': 22.10.1
       form-data: 4.0.1
-    optional: true
 
   '@types/node@18.19.70':
     dependencies:
       undici-types: 5.26.5
-    optional: true
 
   '@types/node@22.10.1':
     dependencies:
@@ -12475,7 +12485,6 @@ snapshots:
   agentkeepalive@4.6.0:
     dependencies:
       humanize-ms: 1.2.1
-    optional: true
 
   aggregate-error@3.1.0:
     dependencies:
@@ -13604,8 +13613,7 @@ snapshots:
       cross-spawn: 7.0.3
       signal-exit: 4.1.0
 
-  form-data-encoder@1.7.2:
-    optional: true
+  form-data-encoder@1.7.2: {}
 
   form-data@4.0.1:
     dependencies:
@@ -13617,7 +13625,6 @@ snapshots:
     dependencies:
       node-domexception: 1.0.0
       web-streams-polyfill: 4.0.0-beta.3
-    optional: true
 
   forwarded@0.2.0: {}
 
@@ -13894,7 +13901,6 @@ snapshots:
   humanize-ms@1.2.1:
     dependencies:
       ms: 2.1.3
-    optional: true
 
   iconv-lite@0.4.24:
     dependencies:
@@ -14791,8 +14797,7 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  node-domexception@1.0.0:
-    optional: true
+  node-domexception@1.0.0: {}
 
   node-ensure@0.0.0: {}
 
@@ -14886,6 +14891,20 @@ snapshots:
       define-lazy-prop: 2.0.0
       is-docker: 2.2.1
       is-wsl: 2.2.0
+
+  openai@4.78.1(zod@3.23.8):
+    dependencies:
+      '@types/node': 18.19.70
+      '@types/node-fetch': 2.6.12
+      abort-controller: 3.0.0
+      agentkeepalive: 4.6.0
+      form-data-encoder: 1.7.2
+      formdata-node: 4.4.1
+      node-fetch: 2.7.0
+    optionalDependencies:
+      zod: 3.23.8
+    transitivePeerDependencies:
+      - encoding
 
   openai@4.78.1(zod@3.24.1):
     dependencies:
@@ -16362,8 +16381,7 @@ snapshots:
 
   ultracite@4.1.8: {}
 
-  undici-types@5.26.5:
-    optional: true
+  undici-types@5.26.5: {}
 
   undici-types@6.20.0: {}
 
@@ -16622,8 +16640,7 @@ snapshots:
     dependencies:
       defaults: 1.0.4
 
-  web-streams-polyfill@4.0.0-beta.3:
-    optional: true
+  web-streams-polyfill@4.0.0-beta.3: {}
 
   web-vitals@4.2.4: {}
 

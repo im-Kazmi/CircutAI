@@ -1,7 +1,7 @@
-import { prisma, Prisma } from "@repo/database";
+import { DocumentProcessingStatus, prisma, Prisma } from "@repo/database";
 import { BaseService } from "./base-service";
 import { PaginationParams, QueryUtils, SortingParams } from "../utils/query";
-import { memoryService, r2 } from "services";
+import { memoryService } from "services";
 
 export class DocumentService extends BaseService {
   async list(
@@ -131,5 +131,12 @@ export class DocumentService extends BaseService {
     } catch (error) {
       throw new Error(`Error retrieving document: ${(error as Error).message}`);
     }
+  }
+
+  async updateStatus(documentId: string, status: DocumentProcessingStatus) {
+    return prisma.document.update({
+      where: { id: documentId },
+      data: { processingStatus: status },
+    });
   }
 }

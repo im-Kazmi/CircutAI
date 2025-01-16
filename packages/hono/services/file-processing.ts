@@ -1,34 +1,26 @@
-import { promises as fsPromises, createReadStream } from "fs";
 import csv from "csv-parser";
-import XLSX from "xlsx";
+import { readFile as ReadExcelFile } from "xlsx";
 import { lookup } from "mime-types";
 
 export class FileProcessingService {
-  async processFile(filePath: string): Promise<string> {
+  async processFile(fileUrl: string, fileName: string): Promise<string> {
     try {
-      const fileType = lookup(filePath);
+      const fileType = lookup(fileName);
       if (!fileType) throw new Error("Unable to detect file type.");
 
       switch (fileType) {
         case "text/plain":
-          return this.readFile(filePath);
-
         case "text/markdown":
-          return this.readFile(filePath);
-
-        case "application/pdf":
-          return this.processPDF(filePath);
-
-        case "text/csv":
-          return this.processCSV(filePath);
-
-        case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-        case "application/vnd.ms-excel":
-          return this.processExcel(filePath);
-
         case "application/javascript":
         case "text/x-python":
-          return this.readFile(filePath);
+          return this.readFile(fileUrl);
+
+        case "text/csv":
+          return this.processCSV(fileUrl);
+
+        // case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+        // case "application/vnd.ms-excel":
+        //   return this.processExcel(fileUrl);
 
         default:
           throw new Error(`Unsupported file type: ${fileType}`);
@@ -38,20 +30,28 @@ export class FileProcessingService {
     }
   }
 
-  private async readFile(filePath: string): Promise<string> {
+  private async readFile(fileUrl: string): Promise<string> {
     try {
-      return await fsPromises.readFile(filePath, "utf-8");
+      const response = await fetch(fileUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.text();
     } catch (error) {
       throw new Error(`Error reading file: ${(error as Error).message}`);
     }
   }
 
-  private async processCSV(filePath: string): Promise<string> {
+  private async processCSV(fileUrl: string): Promise<string> {
     try {
+      const response = await fetch(fileUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const text = await response.text();
       const rows: Record<string, string>[] = [];
       return new Promise((resolve, reject) => {
-        createReadStream(filePath)
-          .pipe(csv())
+        csv()
           .on("data", (row) => rows.push(row))
           .on("end", () => resolve(JSON.stringify(rows)))
           .on("error", (error) =>
@@ -63,16 +63,23 @@ export class FileProcessingService {
     }
   }
 
-  private async processExcel(filePath: string): Promise<string> {
-    try {
-      const workbook = XLSX.readFile(filePath);
-      const sheetName = workbook.SheetNames[0];
-      const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-      return JSON.stringify(sheetData);
-    } catch (error) {
-      throw new Error(
-        `Error processing Excel file: ${(error as Error).message}`,
-      );
-    }
-  }
+  // private async processExcel(fileUrl: string): Promise<string> {
+  //   try {
+  //     const response = await fetch(fileUrl);
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
+  //     const arrayBuffer = await response.arrayBuffer();
+  //     const workbook = ReadExcelFile(new Uint8Array(arrayBuffer), {
+  //       type: "array",
+  //     });
+  //     const sheetName = workbook.SheetNames[0];
+  //     const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+  //     return JSON.stringify(sheetData);
+  //   } catch (error) {
+  //     throw new Error(
+  //       `Error processing Excel file: ${(error as Error).message}`,
+  //     );
+  //   }
+  // }
 }
