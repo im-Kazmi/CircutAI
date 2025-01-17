@@ -1,7 +1,7 @@
 import { logger, task } from "@trigger.dev/sdk/v3";
-import { getFileUrl, uploadFileToBucket } from "../../services/file-upload";
-import { FileProcessingService } from "../../services/file-processing";
-import { PineconeService } from "../../services/pinecone";
+import { getFileUrl, uploadFileToBucket } from "../services/file-upload";
+import { FileProcessingService } from "../services/file-processing";
+import { PineconeService } from "../services/pinecone";
 import { documentService } from "services";
 import { Logger } from "@trigger.dev/sdk";
 import { chunkText } from "helpers/file-processing";
