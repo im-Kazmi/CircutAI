@@ -6,6 +6,7 @@ import { documentService } from "services";
 import { Logger } from "@trigger.dev/sdk";
 import { chunkText } from "helpers/file-processing";
 import { randomUUID } from "crypto";
+import { v4 as uuid } from "uuid";
 
 export type SerializedFile = {
   name: string;
@@ -78,6 +79,7 @@ export const uploadAndProcessDocument = task({
         const embeddingData = chunks.map((chunk, index) => ({
           text: chunk,
           metadata: {
+            text: chunk,
             documentId: document.id,
             chunkIndex: index,
             fileName: file.name,
@@ -92,30 +94,18 @@ export const uploadAndProcessDocument = task({
           return;
         }
 
-        const embeddings = embeddingsResponse?.data;
+        const embeddings = embeddingsResponse.data;
 
-        const data = embeddings?.map((embedding) => ({
-          id: document.id,
+        const data = embeddings.map((embedding, index) => ({
+          id: uuid(),
           values: embedding.values!,
+          metadata: embeddingData[index].metadata,
         }));
 
-        if (!data || !data.values) {
-          console.log("there is no embedding data");
-          return;
-        }
-
-        await pineconeService.storeEmbeddings(
-          {
-            embeddings: data,
-            memoryId,
-            metadata: {
-              documentId: document.id,
-              memoryId,
-            },
-          },
-          document.id,
-        );
-
+        await pineconeService.storeEmbeddings({
+          embeddings: data,
+          memoryId,
+        });
         await documentService.updateStatus(document.id, "INDEXED");
 
         logger.info(`Document processed successfully: ${document.id}`);

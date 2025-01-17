@@ -1,9 +1,13 @@
 import { Pinecone } from "@pinecone-database/pinecone";
-
+import { time } from "console";
 const pc = new Pinecone({
   apiKey:
-    "pcsk_5jMgqb_6n2J5AccwE1YqPdTNnQx1uVXirJU66EiJC3XjiEE1SVE31GaR2xAcisPmLRARLF",
+    "pcsk_wqbLD_HsGgvMtzUVpXteUhpwdPaHKWjjqob1YiYKbhC2GtKnpCWp8ntVVfkx9VqwHFx54",
 });
+
+const index = pc.index("myindex");
+
+const model = "multilingual-e5-large";
 
 const data = [
   {
@@ -29,13 +33,99 @@ const data = [
   },
 ];
 
-// Convert the text into numerical vectors that Pinecone can index
-const model = "multilingual-e5-large";
+async function main() {
+  const embeddingsResponse = await pc.inference.embed(
+    model,
+    data.map((d) => d.text),
+    { inputType: "passage", truncate: "END" },
+  );
 
-const embeddings = await pc.inference.embed(
-  model,
-  data.map((d) => d.text),
-  { inputType: "passage", truncate: "END" },
-);
+  const embeddings = embeddingsResponse?.data;
 
-console.log(embeddings);
+  console.log(embeddings);
+
+  const asdf = embeddings?.map((embedding, index) => ({
+    id: data[index].id, // Use the original `id` from the `data` array
+    values: embedding.values,
+    metadata: { text: data[index].text }, // Access the `text` property correctly
+  }));
+
+  if (!asdf || !asdf.values) {
+    console.log("there is no embedding data");
+    return;
+  }
+
+  await storeEmbeddings(
+    {
+      embeddings: asdf,
+      texts: data.map((d) => d.text),
+      memoryId: "asdfasdfasdf",
+      metadata: {},
+    },
+    "document.id",
+  );
+}
+
+async function storeEmbeddings(data, documentId) {
+  if (!data.embeddings) {
+    console.log("there is no embedding");
+    return;
+  }
+
+  const embeddingsWithMetadata = data.embeddings.map((embedding, index) => ({
+    id: embedding.id,
+    values: embedding.values,
+    metadata: { text: data.texts[index], documentId },
+  }));
+
+  console.log(embeddingsWithMetadata);
+
+  try {
+    await index.namespace("test").upsert(embeddingsWithMetadata);
+
+    console.log("vectors stored with metadata");
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+main();
+
+async function query() {
+  const userEmbedding = await pc.inference.embed(
+    model,
+    ["who was steve jobs?"],
+    {
+      inputType: "passage",
+      truncate: "END",
+    },
+  );
+
+  const matches = await queryIndex(userEmbedding.data[0].values);
+
+  // Extract the text and other metadata from the matches
+  const results = matches.map((match) => ({
+    id: match.id,
+    text: match.metadata, // Metadata includes the original text
+    score: match.score, // Relevance score
+  }));
+
+  console.log("Results = ", results);
+}
+
+async function queryIndex(queryVector, topK = 5) {
+  try {
+    const results = await index.namespace("test").query({
+      vector: queryVector,
+      topK,
+      includeMetadata: true,
+    });
+
+    return results.matches;
+  } catch (err) {
+    console.log("Error querying index:", err);
+    return null;
+  }
+}
+
+query();

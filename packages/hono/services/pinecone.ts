@@ -3,22 +3,30 @@ import {
   IndexModel,
   Pinecone,
 } from "@pinecone-database/pinecone";
-import { Embedding } from "@pinecone-database/pinecone/dist/pinecone-generated-ts-fetch/inference";
 
 const pc = new Pinecone({
+  // apiKey: process.env.PINECONE_API_KEY!,
   apiKey:
     "pcsk_wqbLD_HsGgvMtzUVpXteUhpwdPaHKWjjqob1YiYKbhC2GtKnpCWp8ntVVfkx9VqwHFx54",
 });
 
 const index = pc.index("myindex");
-
 const model = "multilingual-e5-large";
+
+interface EmbeddingData {
+  text: string;
+  metadata?: {
+    documentId?: string;
+    chunkIndex?: number;
+    fileName?: string;
+    text?: string;
+    [key: string]: any;
+  };
+}
 
 export class PineconeService {
   async generateEmbeddings(
-    data: {
-      text: string;
-    }[],
+    data: EmbeddingData[],
   ): Promise<EmbeddingsList | null> {
     try {
       const embeddings = await pc.inference.embed(
@@ -29,7 +37,7 @@ export class PineconeService {
 
       return embeddings;
     } catch (err) {
-      console.log(err);
+      console.error("Error generating embeddings:", err);
       return null;
     }
   }
@@ -50,26 +58,70 @@ export class PineconeService {
     return index;
   }
 
-  async storeEmbeddings(
-    data: {
-      embeddings: { id: string; values: number[] }[];
-      memoryId: string;
-      metadata: any;
-    },
-    documentId: string,
-  ) {
-    if (!data.embeddings) {
-      console.log("there is no embedding");
+  async storeEmbeddings(data: {
+    embeddings: {
+      id: string;
+      values: number[];
+      metadata: {
+        text: string;
+        documentId?: string;
+        chunkIndex?: number;
+        fileName?: string;
+        [key: string]: any;
+      };
+    }[];
+    memoryId: string;
+  }) {
+    if (!data.embeddings || data.embeddings.length === 0) {
+      console.error("No embeddings provided for storage");
       return;
     }
 
-    console.log(data);
     try {
-      await index.namespace(data.memoryId).upsert(data.embeddings);
+      const vectorsWithMetadata = data.embeddings.map((embedding) => ({
+        ...embedding,
+        metadata: {
+          ...embedding.metadata,
+          text: embedding.metadata.text || "",
+        },
+      }));
 
-      console.log("vectors stored");
+      await index.namespace(data.memoryId).upsert(vectorsWithMetadata);
+      console.log(
+        `Successfully stored ${vectorsWithMetadata.length} vectors with metadata`,
+      );
     } catch (err) {
-      console.log(err);
+      console.error("Error storing embeddings:", err);
+      throw err;
+    }
+  }
+
+  async queryIndex(
+    memoryId: string,
+    queryVector: number[],
+    topK = 5,
+    filter?: object,
+  ) {
+    try {
+      const results = await index.namespace(memoryId).query({
+        vector: queryVector,
+        topK,
+        includeMetadata: true,
+        filter: filter,
+      });
+
+      return (
+        results.matches?.map((match) => ({
+          ...match,
+          metadata: {
+            ...match.metadata,
+            text: match.metadata?.text || "",
+          },
+        })) || []
+      );
+    } catch (err) {
+      console.error("Error querying index:", err);
+      return null;
     }
   }
 }
