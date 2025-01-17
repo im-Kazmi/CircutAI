@@ -1,8 +1,7 @@
 import { Pinecone } from "@pinecone-database/pinecone";
 import { time } from "console";
 const pc = new Pinecone({
-  apiKey:
-    "pcsk_wqbLD_HsGgvMtzUVpXteUhpwdPaHKWjjqob1YiYKbhC2GtKnpCWp8ntVVfkx9VqwHFx54",
+  apiKey: "",
 });
 
 const index = pc.index("myindex");

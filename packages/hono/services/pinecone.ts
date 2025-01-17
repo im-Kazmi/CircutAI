@@ -6,7 +6,8 @@ import {
 
 const pc = new Pinecone({
   // apiKey: process.env.PINECONE_API_KEY!,
-  apiKey: "",
+  apiKey:
+    "pcsk_wqbLD_HsGgvMtzUVpXteUhpwdPaHKWjjqob1YiYKbhC2GtKnpCWp8ntVVfkx9VqwHFx54",
 });
 
 const index = pc.index("myindex");
