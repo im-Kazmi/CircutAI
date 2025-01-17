@@ -109,6 +109,7 @@ export const uploadAndProcessDocument = task({
         await documentService.updateStatus(document.id, "INDEXED");
 
         logger.info(`Document processed successfully: ${document.id}`);
+
         return fileContent;
       } catch (error) {
         logger.error(

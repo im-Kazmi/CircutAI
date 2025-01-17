@@ -1,11 +1,10 @@
 import { Pinecone } from "@pinecone-database/pinecone";
-import { time } from "console";
+
 const pc = new Pinecone({
   apiKey: "",
 });
 
 const index = pc.index("myindex");
-
 const model = "multilingual-e5-large";
 
 const data = [
@@ -41,75 +40,73 @@ async function main() {
 
   const embeddings = embeddingsResponse?.data;
 
-  console.log(embeddings);
-
-  const asdf = embeddings?.map((embedding, index) => ({
-    id: data[index].id, // Use the original `id` from the `data` array
-    values: embedding.values,
-    metadata: { text: data[index].text }, // Access the `text` property correctly
-  }));
-
-  if (!asdf || !asdf.values) {
-    console.log("there is no embedding data");
+  if (!embeddings) {
+    console.log("No embeddings generated");
     return;
   }
 
-  await storeEmbeddings(
-    {
-      embeddings: asdf,
-      texts: data.map((d) => d.text),
-      memoryId: "asdfasdfasdf",
-      metadata: {},
+  const vectorsWithMetadata = embeddings.map((embedding, index) => ({
+    id: data[index].id,
+    values: embedding.values,
+    metadata: {
+      text: data[index].text,
+      timestamp: new Date().toISOString(),
     },
-    "document.id",
-  );
+  }));
+
+  await storeEmbeddings({
+    embeddings: vectorsWithMetadata,
+    memoryId: "asdfasdfasdf",
+  });
 }
 
-async function storeEmbeddings(data, documentId) {
-  if (!data.embeddings) {
-    console.log("there is no embedding");
+async function storeEmbeddings(data) {
+  if (!data.embeddings || data.embeddings.length === 0) {
+    console.log("No embeddings to store");
     return;
   }
-
-  const embeddingsWithMetadata = data.embeddings.map((embedding, index) => ({
-    id: embedding.id,
-    values: embedding.values,
-    metadata: { text: data.texts[index], documentId },
-  }));
-
-  console.log(embeddingsWithMetadata);
 
   try {
-    await index.namespace("test").upsert(embeddingsWithMetadata);
-
-    console.log("vectors stored with metadata");
+    await index.namespace("test").upsert(data.embeddings);
+    console.log("Vectors stored with metadata successfully");
   } catch (err) {
-    console.log(err);
+    console.error("Error storing vectors:", err);
   }
 }
 
-main();
-
 async function query() {
-  const userEmbedding = await pc.inference.embed(
-    model,
-    ["who was steve jobs?"],
-    {
-      inputType: "passage",
-      truncate: "END",
-    },
-  );
+  try {
+    const userEmbedding = await pc.inference.embed(
+      model,
+      ["who was steve jobs?"],
+      {
+        inputType: "passage",
+        truncate: "END",
+      },
+    );
 
-  const matches = await queryIndex(userEmbedding.data[0].values);
+    if (!userEmbedding.data[0].values) {
+      console.log("No query embedding generated");
+      return;
+    }
 
-  // Extract the text and other metadata from the matches
-  const results = matches.map((match) => ({
-    id: match.id,
-    text: match.metadata, // Metadata includes the original text
-    score: match.score, // Relevance score
-  }));
+    const matches = await queryIndex(userEmbedding.data[0].values);
 
-  console.log("Results = ", results);
+    if (!matches) {
+      console.log("No matches found");
+      return;
+    }
+
+    console.log("Query Results:");
+    matches.forEach((match, index) => {
+      console.log(`\nMatch ${index + 1}:`);
+      console.log(`Text: ${match.text}`);
+      console.log(`Score: ${match.score}`);
+      console.log(`Document ID: ${match.documentId}`);
+    });
+  } catch (error) {
+    console.error("Error during query:", error);
+  }
 }
 
 async function queryIndex(queryVector, topK = 5) {
@@ -118,13 +115,23 @@ async function queryIndex(queryVector, topK = 5) {
       vector: queryVector,
       topK,
       includeMetadata: true,
+      includeValues: false,
     });
 
-    return results.matches;
+    return results.matches?.map((match) => match);
   } catch (err) {
-    console.log("Error querying index:", err);
+    console.error("Error querying index:", err);
     return null;
   }
 }
 
-query();
+// Run the example
+async function runExample() {
+  console.log("Storing embeddings...");
+  await main();
+
+  console.log("\nQuerying embeddings...");
+  await query();
+}
+
+runExample();
