@@ -3,16 +3,10 @@ import { circutHonoService } from "../services";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
 import { Circut, CircutPrivacy } from "@repo/database";
+import { prisma, Prisma } from "@repo/database";
 import { Hono } from "hono";
+import { circutUpdateInputSchema, createCircutForm } from "schemas/circut";
 import { z } from "zod";
-
-export const createCircutForm = z.object({
-  name: z.string().min(2, {
-    message: "circut name must be at least 2 characters.",
-  }),
-  description: z.string(),
-  privacy: z.enum(["PRIVATE", "PUBLIC"]),
-});
 
 const app = new Hono()
   .use(clerkMiddleware())
@@ -89,6 +83,34 @@ const app = new Hono()
     });
 
     return c.json(circut, 200);
-  });
+  })
+  .put(
+    "/:id",
+    zValidator("json", circutUpdateInputSchema),
+    zValidator("param", z.object({ id: z.string() })),
+    async (c) => {
+      const circutService = c.get("circutService");
+
+      const auth = getAuth(c);
+
+      if (!auth?.userId) {
+        return c.json(
+          {
+            message: "You are not logged in.",
+          },
+          400,
+        );
+      }
+
+      const values = c.req.valid("json");
+      const { id } = c.req.valid("param");
+
+      const circut = await circutService.updateCircut(id, auth.orgId!, {
+        ...values,
+      });
+
+      return c.json(circut, 200);
+    },
+  );
 
 export default app;

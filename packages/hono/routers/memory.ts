@@ -4,27 +4,9 @@ import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
 import { Memory } from "@repo/database";
 import { Hono } from "hono";
+import { createMemoryForm } from "schemas/memory";
 import { z } from "zod";
 
-export const createMemoryForm = z.object({
-  name: z.string().min(2, {
-    message: "memory name must be at least 2 characters.",
-  }),
-  description: z.string(),
-  embeddingModel: z.enum([
-    "ANTHROPIC",
-    "OPENAI",
-    "MISTRAL",
-    "TOGETHER",
-    "GROQ",
-    "GOOGLE",
-    "COHERE",
-    "FIREWORKS",
-    "PERPLEXITY",
-    "DEEPSEEK",
-    "XAI",
-  ]),
-});
 const app = new Hono()
   .use(clerkMiddleware())
   .use(memoryHonoService.middleware("memoryService"))

@@ -8,11 +8,6 @@ import axios from "axios";
 import { uploadAndProcessDocument } from "src/trigger/example";
 import { v4 as uuid } from "uuid";
 
-export const createDocumentSchema = z.object({
-  memoryId: z.string(),
-  files: z.array(z.instanceof(File)),
-});
-
 const app = new Hono()
   .use(clerkMiddleware())
   .use(documentHonoService.middleware("documentService"))
@@ -117,7 +112,6 @@ const app = new Hono()
         orgId: auth.orgId!,
       });
 
-      //You can use the handle to check the status of the task, cancel and retry it.
       console.log("Task is running with handle", taskResult.id);
       return c.json("triggerted");
     } catch (error) {
