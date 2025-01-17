@@ -5,7 +5,7 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
 import axios from "axios";
-import { uploadAndProcessDocument } from "src/trigger/example";
+import { uploadAndProcessDocument } from "trigger/process-docs";
 import { v4 as uuid } from "uuid";
 
 const app = new Hono()
