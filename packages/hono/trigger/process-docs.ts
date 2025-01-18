@@ -2,9 +2,9 @@ import { logger, task } from "@trigger.dev/sdk/v3";
 import { getFileUrl, uploadFileToBucket } from "../services/file-upload";
 import { FileProcessingService } from "../services/file-processing";
 import { PineconeService } from "../services/pinecone";
-import { documentService } from "services";
+import { documentService } from "../services";
 import { Logger } from "@trigger.dev/sdk";
-import { chunkText } from "helpers/file-processing";
+import { chunkText } from "../helpers/file-processing";
 import { randomUUID } from "crypto";
 import { v4 as uuid } from "uuid";
 

@@ -199,13 +199,11 @@ model Document {
 }
 
 model Tool {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  apiUrl      String
-  config      Json     @default("{}")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  config    Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   CircutTool CircutTool[]
 }
