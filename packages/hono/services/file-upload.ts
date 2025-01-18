@@ -6,12 +6,10 @@ import {
 import { Upload } from "@aws-sdk/lib-storage";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { v4 as uuid } from "uuid";
-const CLOUDFLARE_ACCOUNT_ID = "060bfd194d2fcf0b4665b57dab183689";
-const CLOUDFLARE_ACCESS_KEY_ID = "4bf03f01533b257b6c7dbe73d93c078d";
-const CLOUDFLARE_SECRET_ACCESS_KEY =
-  "05dce58f90c586591dbdc088308c2d5903d3a7d531d015d863e9d4cdb591d766";
-const CLOUDFLARE_BUCKET_NAME = "circut-ai";
-
+const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID!;
+const CLOUDFLARE_ACCESS_KEY_ID = process.env.CLOUDFLARE_ACCESS_KEY_ID!;
+const CLOUDFLARE_SECRET_ACCESS_KEY = process.env.CLOUDFLARE_SECRET_ACCESS_KEY!;
+const CLOUDFLARE_BUCKET_NAME = process.env.CLOUDFLARE_BUCKET_NAME!;
 export const s3Client = new S3Client({
   region: "auto",
   endpoint: `https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,

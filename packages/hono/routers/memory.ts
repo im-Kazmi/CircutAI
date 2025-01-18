@@ -4,7 +4,7 @@ import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
 import { Memory } from "@repo/database";
 import { Hono } from "hono";
-import { createMemoryForm } from "schemas/memory";
+import { createMemoryForm } from "../schemas/memory";
 import { z } from "zod";
 
 const app = new Hono()

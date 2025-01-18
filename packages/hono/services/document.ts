@@ -1,7 +1,7 @@
 import { DocumentProcessingStatus, prisma, Prisma } from "@repo/database";
 import { BaseService } from "./base-service";
 import { PaginationParams, QueryUtils, SortingParams } from "../utils/query";
-import { memoryService } from "services";
+import { memoryService } from "../services";
 
 export class DocumentService extends BaseService {
   async list(

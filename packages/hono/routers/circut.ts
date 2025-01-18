@@ -5,7 +5,7 @@ import { zValidator } from "@hono/zod-validator";
 import { Circut, CircutPrivacy } from "@repo/database";
 import { prisma, Prisma } from "@repo/database";
 import { Hono } from "hono";
-import { circutUpdateInputSchema, createCircutForm } from "schemas/circut";
+import { circutUpdateInputSchema, createCircutForm } from "../schemas/circut";
 import { z } from "zod";
 
 const app = new Hono()
