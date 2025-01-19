@@ -1,7 +1,14 @@
+import { Circut } from "@prisma/client";
 import { Button } from "@repo/design-system/components/ui/button";
 import { Code, Play, Coins, GitForkIcon } from "lucide-react";
 
-export function HeaderActions() {
+type CircutChanged = Omit<Circut, "createdAt" | "updatedAt">;
+
+type Props = {
+  circut: CircutChanged;
+};
+
+export function HeaderActions({ circut }: Props) {
   return (
     <div className="flex items-center gap-2 px-4 py-2 border-b ">
       <Button variant="ghost" size="sm" className="gap-2">

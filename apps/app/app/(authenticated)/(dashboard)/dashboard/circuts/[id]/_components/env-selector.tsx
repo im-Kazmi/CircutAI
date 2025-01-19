@@ -12,12 +12,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/design-system/components/ui/tooltip";
+import { ModelTrigger } from "./model-trigger";
 
 export function EnvSelector() {
   return (
     <div className="flex items-center gap-3 p-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Select defaultValue="production">
-        <SelectTrigger className="w-[180px] bg-emerald-500 text-white hover:bg-emerald-600 transition-colors">
+        <SelectTrigger className="w-[180px] bg-[#CBFFBF] text-neutral-900 hover:bg-emerald-600 transition-colors">
           <SelectValue placeholder="Select environment" />
         </SelectTrigger>
         <SelectContent>
@@ -26,23 +27,7 @@ export function EnvSelector() {
       </Select>
 
       <div className="flex items-center gap-2">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="outline" size="icon" className="h-8 w-8">
-              <Brain className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Select Model</TooltipContent>
-        </Tooltip>
-
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="outline" size="icon" className="h-8 w-8">
-              <MemoryStickIcon className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Memory Settings</TooltipContent>
-        </Tooltip>
+        <ModelTrigger />
 
         <Tooltip>
           <TooltipTrigger asChild>

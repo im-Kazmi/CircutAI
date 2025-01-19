@@ -12,10 +12,17 @@ import {
   TabsList,
   TabsTrigger,
 } from "@repo/design-system/components/ui/tabs";
+import { Circut } from "@prisma/client";
 
-export function Playground() {
+type CircutChanged = Omit<Circut, "createdAt" | "updatedAt">;
+
+type Props = {
+  circut: CircutChanged;
+};
+
+export function Playground({ circut }: Props) {
   return (
-    <div className=" bg-muted/10">
+    <div className=" bg-muted/10 ">
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-2">
           <Play className="h-4 w-4" />
@@ -35,7 +42,7 @@ export function Playground() {
             <TabsTrigger value="output">Output</TabsTrigger>
           </TabsList>
           <TabsContent value="code">
-            <Card>
+            <Card className="w-[500px]">
               <CardHeader className="flex flex-row items-center justify-between py-2">
                 <CardTitle className="text-sm font-medium">
                   JavaScript

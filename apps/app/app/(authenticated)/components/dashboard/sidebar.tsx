@@ -61,7 +61,7 @@ type GlobalSidebarProperties = {
   readonly children: ReactNode;
 };
 
-const data = {
+export const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
@@ -164,11 +164,10 @@ const data = {
 export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
   const sidebar = useSidebar();
 
-  const queryClient = useQueryClient();
   return (
     <>
       <Sidebar variant="floating" className="bg-muted">
-        <SidebarHeader>
+        <SidebarHeader className="dark:bg-neutral-950">
           <SidebarMenu>
             <SidebarMenuItem>
               <div
@@ -182,7 +181,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>
-        <SidebarContent>
+        <SidebarContent className="dark:bg-neutral-950">
           <SidebarGroup>
             <SidebarGroupLabel>Platform</SidebarGroupLabel>
             <SidebarMenu>
@@ -292,7 +291,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
-        <SidebarFooter>
+        <SidebarFooter className="dark:bg-neutral-950">
           <SidebarMenu>
             <SidebarMenuItem className="flex items-center gap-2">
               <UserButton

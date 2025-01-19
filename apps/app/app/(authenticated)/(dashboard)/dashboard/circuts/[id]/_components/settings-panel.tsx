@@ -12,23 +12,22 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@repo/design-system/components/ui/tooltip";
+import { Circut } from "@prisma/client";
+import { MetaSettings } from "./meta-settings";
+import { useFormContext } from "react-hook-form";
+import { CircutUpdateInput } from "../client-page";
+import { CustomSwitch } from "./custom-switch";
+
+type CircutChanged = Omit<Circut, "createdAt" | "updatedAt">;
 
 export function SettingsPanel() {
+  const { control, watch, setValue, getValues } =
+    useFormContext<CircutUpdateInput>();
+
+  const variables = watch("config.variables");
   return (
     <div className="space-y-4">
-      <Card className="rounded-xl">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base font-medium">
-            <Variable className="h-4 w-4" />
-            Variables
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">No variables defined</p>
-        </CardContent>
-      </Card>
-
-      <Card className="rounded-xl">
+      <Card className="rounded-xl bg-transparent border shadow-none">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base font-medium">
             Configuration
@@ -42,43 +41,18 @@ export function SettingsPanel() {
             </Tooltip>
           </CardTitle>
         </CardHeader>
+        <MetaSettings />
+      </Card>
+      <Card className="rounded-xl bg-transparent shadow-none">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base font-medium">
+            <Variable className="h-4 w-4" />
+            Variables
+          </CardTitle>
+        </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="json-mode">JSON mode</Label>
-              <p className="text-xs text-muted-foreground">
-                Force responses in JSON format
-              </p>
-            </div>
-            <Switch id="json-mode" />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="moderation">Moderation</Label>
-              <p className="text-xs text-muted-foreground">
-                Filter inappropriate content
-              </p>
-            </div>
-            <Switch id="moderation" defaultChecked />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="stream-mode">Stream mode</Label>
-              <p className="text-xs text-muted-foreground">
-                Stream responses in real-time
-              </p>
-            </div>
-            <Switch id="stream-mode" defaultChecked />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="store-messages">Store messages</Label>
-              <p className="text-xs text-muted-foreground">
-                Save conversation history
-              </p>
-            </div>
-            <Switch id="store-messages" defaultChecked />
-          </div>
+          {variables && variables.map((v) => <h1>{v}</h1>)}
+          <p className="text-sm text-muted-foreground">No variables defined</p>
         </CardContent>
       </Card>
     </div>

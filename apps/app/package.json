@@ -23,7 +23,6 @@
     "@repo/feature-flags": "workspace:*",
     "@repo/features": "workspace:*",
     "@repo/hono": "workspace:*",
-    "@repo/job-queue": "workspace:*",
     "@repo/next-config": "workspace:*",
     "@repo/react-query": "workspace:*",
     "@repo/seo": "workspace:*",

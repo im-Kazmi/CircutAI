@@ -20,8 +20,4 @@ export const circutUpdateInputSchema = z.object({
   streamMode: z.boolean().optional(),
   storeMessages: z.boolean().optional(),
   config: z.any().optional(),
-  version: z.number().optional(),
-  status: z.string().optional(),
-  createdAt: z.union([z.date(), z.string()]).optional(),
-  updatedAt: z.union([z.date(), z.string()]).optional(),
 });

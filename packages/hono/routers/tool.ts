@@ -87,16 +87,6 @@ const app = new Hono()
 
     const tool = await toolService.createTool({
       ...values,
-      CircutTool: {
-        create: {
-          circut: {
-            connect: {
-              id: values.circutId,
-              orgId: auth.orgId!,
-            },
-          },
-        },
-      },
     });
 
     return c.json(tool, 200);
@@ -126,7 +116,7 @@ const app = new Hono()
 
       if (
         !existingTool ||
-        !existingTool.CircutTool.some((ct) => ct.cirut.orgId === auth.orgId)
+        !existingTool.CircutTool.some((ct) => ct.circut.orgId === auth.orgId)
       ) {
         return c.json(
           {

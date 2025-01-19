@@ -11,12 +11,39 @@ import {
 } from "@repo/design-system/components/ui/card";
 import { FileText, History, User, Bot } from "lucide-react";
 import { cn } from "@repo/design-system/lib/utils";
+import { Circut } from "@prisma/client";
+import { CircutUpdateInput } from "../client-page";
+import { useFormContext } from "react-hook-form";
 
-export function PromptEditor() {
+type CircutChanged = Omit<Circut, "createdAt" | "updatedAt">;
+
+type Props = {
+  circut: CircutChanged;
+};
+
+export function PromptEditor({ circut }: Props) {
   const [messageType, setMessageType] = useState<"user" | "assistant">("user");
 
+  const { control, watch, setValue, getValues } =
+    useFormContext<CircutUpdateInput>();
+
+  const systemInstructions = watch("systemInstructions");
+
+  const updateInstructions = (value: string) => {
+    setValue("systemInstructions", value);
+    const variableRegex = /{{(.*?)}}/g;
+    const variables: string[] = [];
+    let match;
+
+    while ((match = variableRegex.exec(value)) !== null) {
+      variables.push(match[1].trim());
+    }
+
+    setValue(`config.variables`, variables);
+  };
+
   return (
-    <Card className="rounded-xl border-none shadow-none px-5 bg-white/50">
+    <Card className="rounded-xl border-none shadow-none px-5 bg-background/50">
       <CardHeader className="flex flex-row items-center gap-4 px-0">
         <div className="flex-1">
           <CardTitle className="flex items-center gap-2 text-lg font-medium">
@@ -39,6 +66,8 @@ export function PromptEditor() {
         <Textarea
           placeholder="You are a helpful AI assistant..."
           className="min-h-[300px] resize-none rounded-xl border-muted bg-muted/50 p-4"
+          value={systemInstructions}
+          onChange={(e) => updateInstructions(e.target.value)}
         />
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">

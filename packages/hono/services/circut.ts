@@ -34,7 +34,7 @@ export class CircutService extends BaseService {
         data: {
           ...values,
           config: {
-            model: "openai:gpt-4o-mini",
+            model: "gpt-4o-mini",
             stream: true,
             json: false,
             store: true,
@@ -42,8 +42,8 @@ export class CircutService extends BaseService {
             top_p: 1,
             max_tokens: 1000,
             temperature: 0.7,
-            presence_penalty: 1,
-            frequency_penalty: 1,
+            presence_penalty: 0,
+            frequency_penalty: 0,
             stop: [],
             tool_choice: "auto",
             parallel_tool_calls: false,
@@ -54,7 +54,6 @@ export class CircutService extends BaseService {
                   "You are a content summarizer. You will summarize content without losing context into a less wordy, to-the-point version.",
               },
             ],
-            variables: [],
           },
           org: {
             connect: {

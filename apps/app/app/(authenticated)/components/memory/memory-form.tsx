@@ -125,24 +125,26 @@ export function MemoryForm({
               </FormItem>
             )}
           />
-          <TextureButton
-            disabled={disabled}
-            variant="secondary"
-            type="submit"
-            className="w-full"
-          >
-            {id ? "Save changes" : "Create Circut"}
-          </TextureButton>
-          {!!id && (
-            <TextureButton
-              type="button"
+          <div className="flex flex-col gap-y-2">
+            <Button
               disabled={disabled}
-              onClick={handleDelete}
-              variant={"destructive"}
+              type="submit"
+              className="w-full"
+              variant={"circut"}
             >
-              <Trash className=" size-4 mr-2 " /> Delete Circut
-            </TextureButton>
-          )}
+              {id ? "Save changes" : "Create Circut"}
+            </Button>
+            {!!id && (
+              <TextureButton
+                type="button"
+                disabled={disabled}
+                onClick={handleDelete}
+                variant={"destructive"}
+              >
+                <Trash className=" size-4 mr-2 " /> Delete Circut
+              </TextureButton>
+            )}
+          </div>
         </form>
       </Form>
     </div>

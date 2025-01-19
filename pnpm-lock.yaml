@@ -59,9 +59,6 @@ importers:
       '@repo/hono':
         specifier: workspace:*
         version: link:../../packages/hono
-      '@repo/job-queue':
-        specifier: workspace:*
-        version: link:../../packages/job-queue
       '@repo/next-config':
         specifier: workspace:*
         version: link:../../packages/next-config
@@ -437,6 +434,9 @@ importers:
       '@repo/observability':
         specifier: workspace:*
         version: link:../observability
+      '@tabler/icons-react':
+        specifier: ^3.28.1
+        version: 3.28.1(react@19.0.0)
       '@tanstack/react-table':
         specifier: ^8.20.6
         version: 8.20.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -458,6 +458,9 @@ importers:
       embla-carousel-react:
         specifier: ^8.5.1
         version: 8.5.1(react@19.0.0)
+      framer-motion:
+        specifier: ^11.15.0
+        version: 11.15.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       geist:
         specifier: ^1.3.1
         version: 1.3.1(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
@@ -897,6 +900,22 @@ importers:
         specifier: ^5.7.2
         version: 5.7.2
 
+  packages/security:
+    dependencies:
+      '@arcjet/next':
+        specifier: 1.0.0-alpha.34
+        version: 1.0.0-alpha.34(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.6.1(@bufbuild/protobuf@1.10.0))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      '@repo/env':
+        specifier: workspace:*
+        version: link:../env
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+
   packages/seo:
     dependencies:
       lodash.merge:
@@ -1033,6 +1052,52 @@ packages:
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
+
+  '@arcjet/analyze@1.0.0-alpha.34':
+    resolution: {integrity: sha512-dF08Y7usSqFWkgX8MiX9tvGfuQEuH9alVuOJkrFTVZEPPqx7PxvWYbOyXP1U4sW0eIS0A+Dr6XXGcvuMXt8kpA==}
+    engines: {node: '>=18'}
+
+  '@arcjet/duration@1.0.0-alpha.34':
+    resolution: {integrity: sha512-G4VHK7/Kd3+yaBM3r3NUwQKy8oCNHOm/Rmo+GgLiFoU/AIFBILmz4M7SN2PGDXWjkQVYTut0y+tiVSWL/Aae5w==}
+    engines: {node: '>=18'}
+
+  '@arcjet/env@1.0.0-alpha.34':
+    resolution: {integrity: sha512-iUuoybzv0HgCCuk37F7n9iDJq65LyUB3TUNPFLu4xWRsc3/DAbcuBIbuEbNfJMDmo4waPMwh5n3pRUa4IQ8xPw==}
+    engines: {node: '>=18'}
+
+  '@arcjet/headers@1.0.0-alpha.34':
+    resolution: {integrity: sha512-B5YivO0/ibTHWtb//BascF0jbqGsJF/y3uMs9Lh87Z7eFWf6pVhSE06fgunTuzgPrmtsx9dj6/a20msIS4+gUw==}
+    engines: {node: '>=18'}
+
+  '@arcjet/ip@1.0.0-alpha.34':
+    resolution: {integrity: sha512-jeETf8zGqcFxhrkAs4WkVAZzchI5Ssjh1sEjMQyd5zruTKxVylD0e+gntuGwTJjU4g50nYD2AT5oqfxLZ2Cvjg==}
+    engines: {node: '>=18'}
+
+  '@arcjet/logger@1.0.0-alpha.34':
+    resolution: {integrity: sha512-c8ZpPY88cYXgNoe4j4yKVTBZ9bgvFARYN6a2C1w3HsM35MyQtsZwgHyA7Pxkio3YK/OTBiCpW9oZhIXHpfMqdw==}
+    engines: {node: '>=18'}
+
+  '@arcjet/next@1.0.0-alpha.34':
+    resolution: {integrity: sha512-IQReKR3aDWwXI0X2Tet5CoOj2wPHvqbxJ8rXzznpDyvjU5dTx9Dk8QdEMIl8m0zqgJqGVwPOdI72KiruSBgpkw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      next: '>=13'
+
+  '@arcjet/protocol@1.0.0-alpha.34':
+    resolution: {integrity: sha512-9Z+l58ru/cYl/IYzeBW7FX0KwGwjGTz/rM3p10358IYthMrerQqrEBawb+hHpaWrk/SZTOz0Ruk0PTFoYuP90g==}
+    engines: {node: '>=18'}
+
+  '@arcjet/runtime@1.0.0-alpha.34':
+    resolution: {integrity: sha512-9sMsJhs+OHw2BXZTaDCQOcI9mTBokeDT1xZ8igryeJ5lkTbzraVdPPcA27kCbRAQpI7JMqnwJ1nlsXn54/KBHQ==}
+    engines: {node: '>=18'}
+
+  '@arcjet/sprintf@1.0.0-alpha.34':
+    resolution: {integrity: sha512-8jssxHlhG2OZSWWBVMCLXnxExz0q6Vo9cOxrbH04v9kNI/1ncb1BffK6XUyg5WjKflYEvmvkp6NZOwSylPdaCw==}
+    engines: {node: '>=18'}
+
+  '@arcjet/transport@1.0.0-alpha.34':
+    resolution: {integrity: sha512-plcUZ75X99CHJsmWY50ZWcukmwIFISZZzKzlFk4cAiEabuAY5s6cCgTdlf2p82unYSV7VtgpQyTM2YURP+A5UQ==}
+    engines: {node: '>=18'}
 
   '@aws-crypto/crc32@5.2.0':
     resolution: {integrity: sha512-nLbCWqQNgUiwwtFsen1AdzAtvuLRsQS8rYgMuxCrdKf9kOssamGLuPwyTY9wyYblNr9+1XM8v6zoDTPPSIeANg==}
@@ -1347,6 +1412,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@bufbuild/protobuf@1.10.0':
+    resolution: {integrity: sha512-QDdVFLoN93Zjg36NoQPZfsVH9tZew7wKDKyV5qRdj8ntT4wQCOradQjRaTdwMhWUYsgKsvCINKKm87FdEk96Ag==}
+
   '@cfcs/core@0.0.6':
     resolution: {integrity: sha512-FxfJMwoLB8MEMConeXUCqtMGqxdtePQxRBOiGip9ULcYYam3WfCgoY6xdnMaSkYvRvmosp5iuG+TiPofm65+Pw==}
 
@@ -1388,6 +1456,24 @@ packages:
   '@clerk/types@4.39.0':
     resolution: {integrity: sha512-WWEoXmcob6X80cZZZGobN8aKjHAjAoL0cgVyLX8UeQ+JW4kl1IfUmZQgDBFOafGEm2yUoKlKAP22bWPDqmbTJw==}
     engines: {node: '>=18.17.0'}
+
+  '@connectrpc/connect-node@1.6.1':
+    resolution: {integrity: sha512-DxcD1wsF/aX9GegjAtl7VbpiZNjVJozy87VbaFoN6AF0Ln1Q757r5dgV59Gz0wmlk5f17txUsrEr1f2inlnnAg==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      '@bufbuild/protobuf': ^1.10.0
+      '@connectrpc/connect': 1.6.1
+
+  '@connectrpc/connect-web@1.6.1':
+    resolution: {integrity: sha512-GVfxQOmt3TtgTaKeXLS/EA2IHa3nHxwe2BCHT7X0Q/0hohM+nP5DDnIItGEjGrGdt3LTTqWqE4s70N4h+qIMlQ==}
+    peerDependencies:
+      '@bufbuild/protobuf': ^1.10.0
+      '@connectrpc/connect': 1.6.1
+
+  '@connectrpc/connect@1.6.1':
+    resolution: {integrity: sha512-KchMDNtU4CDTdkyf0qG7ugJ6qHTOR/aI7XebYn3OTCNagaDYWiZUVKgRgwH79yeMkpNgvEUaXSK7wKjaBK9b/Q==}
+    peerDependencies:
+      '@bufbuild/protobuf': ^1.10.0
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1587,6 +1673,10 @@ packages:
 
   '@fastify/basic-auth@5.1.1':
     resolution: {integrity: sha512-L4b7EK5LKZnV6fdH1+rQbjhkKGXjCfiKJ0JkdGHZQPBMHMiXDZF8xbZsCakWGf9c7jDXJicP3FPcIXUPBkuSeQ==}
+
+  '@fastify/busboy@2.1.1':
+    resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
+    engines: {node: '>=14'}
 
   '@fastify/cors@8.5.0':
     resolution: {integrity: sha512-/oZ1QSb02XjP0IK1U0IXktEsw/dUBTxJOW7IpIeO8c/tNalw/KjoNSJv1Sf6eqoBPO+TDGkifq6ynFK3v68HFQ==}
@@ -3760,6 +3850,14 @@ packages:
       typescript:
         optional: true
 
+  '@tabler/icons-react@3.28.1':
+    resolution: {integrity: sha512-KNBpA2kbxr3/2YK5swt7b/kd/xpDP1FHYZCxDFIw54tX8slELRFEf95VMxsccQHZeIcUbdoojmUUuYSbt/sM5Q==}
+    peerDependencies:
+      react: '>= 16'
+
+  '@tabler/icons@3.28.1':
+    resolution: {integrity: sha512-h7nqKEvFooLtFxhMOC1/2eiV+KRXhBUuDUUJrJlt6Ft6tuMw2eU/9GLQgrTk41DNmIEzp/LI83K9J9UUU8YBYQ==}
+
   '@tailwindcss/typography@0.5.15':
     resolution: {integrity: sha512-AqhlCXl+8grUz8uqExv5OTtgpjuVIwFTSXTrh8y9/pw6q2ek7fJ+Y8ZEVw7EB2DCcuCOtEjf9w3+J3rzts01uA==}
     peerDependencies:
@@ -4375,6 +4473,10 @@ packages:
   anymatch@3.1.3:
     resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
     engines: {node: '>= 8'}
+
+  arcjet@1.0.0-alpha.34:
+    resolution: {integrity: sha512-Zwmk8IfG48mM6FYPTOff3MZkAnxLJuANJRoQIsZY+/qDZ8sMJ65D991tybmzUMcZPx8evo8AC0fPN0lOyiJicw==}
+    engines: {node: '>=18'}
 
   arg@4.1.3:
     resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
@@ -7850,6 +7952,9 @@ packages:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
     engines: {node: '>= 0.6'}
 
+  typeid-js@1.1.0:
+    resolution: {integrity: sha512-SS0GEC0/0OJ06IvGEbqc6dVa5WwQN4mDq2UG9x2D7f+CD2X/b+p2xfEPNli0DO23lmeVl45bFt/bAOQa0GB4fg==}
+
   typescript@5.7.2:
     resolution: {integrity: sha512-i5t66RHxDvVN40HfDd1PsEThGNnlMCMT3jMUuoh9/0TaqWevNontacunWyN02LA9/fIbEWlcHZcgTKb9QoaLfg==}
     engines: {node: '>=14.17'}
@@ -7876,6 +7981,10 @@ packages:
 
   undici-types@6.20.0:
     resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
+
+  undici@5.28.5:
+    resolution: {integrity: sha512-zICwjrDrcrUE0pyyJc1I2QzBkLM8FINsgOrt6WjA+BgajVq9Nxu2PbFFXUrAggLfDXlZGZBVZYw7WNV5KiBiBA==}
+    engines: {node: '>=14.0'}
 
   undici@7.1.0:
     resolution: {integrity: sha512-3+mdX2R31khuLCm2mKExSlMdJsfol7bJkIMH80tdXA74W34rT1jKemUTlYR7WY3TqsV4wfOgpatWmmB2Jl1+5g==}
@@ -8353,6 +8462,54 @@ snapshots:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
+
+  '@arcjet/analyze@1.0.0-alpha.34':
+    dependencies:
+      '@arcjet/protocol': 1.0.0-alpha.34
+
+  '@arcjet/duration@1.0.0-alpha.34': {}
+
+  '@arcjet/env@1.0.0-alpha.34': {}
+
+  '@arcjet/headers@1.0.0-alpha.34': {}
+
+  '@arcjet/ip@1.0.0-alpha.34': {}
+
+  '@arcjet/logger@1.0.0-alpha.34':
+    dependencies:
+      '@arcjet/sprintf': 1.0.0-alpha.34
+
+  '@arcjet/next@1.0.0-alpha.34(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.6.1(@bufbuild/protobuf@1.10.0))(next@15.0.4(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))':
+    dependencies:
+      '@arcjet/env': 1.0.0-alpha.34
+      '@arcjet/headers': 1.0.0-alpha.34
+      '@arcjet/ip': 1.0.0-alpha.34
+      '@arcjet/logger': 1.0.0-alpha.34
+      '@arcjet/protocol': 1.0.0-alpha.34
+      '@arcjet/transport': 1.0.0-alpha.34(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.6.1(@bufbuild/protobuf@1.10.0))
+      arcjet: 1.0.0-alpha.34
+      next: 15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+    transitivePeerDependencies:
+      - '@bufbuild/protobuf'
+      - '@connectrpc/connect'
+
+  '@arcjet/protocol@1.0.0-alpha.34':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.0
+      '@connectrpc/connect': 1.6.1(@bufbuild/protobuf@1.10.0)
+      typeid-js: 1.1.0
+
+  '@arcjet/runtime@1.0.0-alpha.34': {}
+
+  '@arcjet/sprintf@1.0.0-alpha.34': {}
+
+  '@arcjet/transport@1.0.0-alpha.34(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.6.1(@bufbuild/protobuf@1.10.0))':
+    dependencies:
+      '@connectrpc/connect-node': 1.6.1(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.6.1(@bufbuild/protobuf@1.10.0))
+      '@connectrpc/connect-web': 1.6.1(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.6.1(@bufbuild/protobuf@1.10.0))
+    transitivePeerDependencies:
+      - '@bufbuild/protobuf'
+      - '@connectrpc/connect'
 
   '@aws-crypto/crc32@5.2.0':
     dependencies:
@@ -9046,6 +9203,8 @@ snapshots:
   '@biomejs/cli-win32-x64@1.9.4':
     optional: true
 
+  '@bufbuild/protobuf@1.10.0': {}
+
   '@cfcs/core@0.0.6':
     dependencies:
       '@egjs/component': 3.0.5
@@ -9102,6 +9261,21 @@ snapshots:
   '@clerk/types@4.39.0':
     dependencies:
       csstype: 3.1.1
+
+  '@connectrpc/connect-node@1.6.1(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.6.1(@bufbuild/protobuf@1.10.0))':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.0
+      '@connectrpc/connect': 1.6.1(@bufbuild/protobuf@1.10.0)
+      undici: 5.28.5
+
+  '@connectrpc/connect-web@1.6.1(@bufbuild/protobuf@1.10.0)(@connectrpc/connect@1.6.1(@bufbuild/protobuf@1.10.0))':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.0
+      '@connectrpc/connect': 1.6.1(@bufbuild/protobuf@1.10.0)
+
+  '@connectrpc/connect@1.6.1(@bufbuild/protobuf@1.10.0)':
+    dependencies:
+      '@bufbuild/protobuf': 1.10.0
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -9239,6 +9413,8 @@ snapshots:
     dependencies:
       '@fastify/error': 3.4.1
       fastify-plugin: 4.5.1
+
+  '@fastify/busboy@2.1.1': {}
 
   '@fastify/cors@8.5.0':
     dependencies:
@@ -11666,6 +11842,13 @@ snapshots:
     optionalDependencies:
       typescript: 5.7.2
 
+  '@tabler/icons-react@3.28.1(react@19.0.0)':
+    dependencies:
+      '@tabler/icons': 3.28.1
+      react: 19.0.0
+
+  '@tabler/icons@3.28.1': {}
+
   '@tailwindcss/typography@0.5.15(tailwindcss@3.4.16(ts-node@10.9.2(@swc/core@1.3.101(@swc/helpers@0.5.13))(@types/node@22.10.1)(typescript@5.7.2)))':
     dependencies:
       lodash.castarray: 4.4.0
@@ -12406,6 +12589,14 @@ snapshots:
     dependencies:
       normalize-path: 3.0.0
       picomatch: 2.3.1
+
+  arcjet@1.0.0-alpha.34:
+    dependencies:
+      '@arcjet/analyze': 1.0.0-alpha.34
+      '@arcjet/duration': 1.0.0-alpha.34
+      '@arcjet/headers': 1.0.0-alpha.34
+      '@arcjet/protocol': 1.0.0-alpha.34
+      '@arcjet/runtime': 1.0.0-alpha.34
 
   arg@4.1.3: {}
 
@@ -16287,6 +16478,10 @@ snapshots:
       media-typer: 0.3.0
       mime-types: 2.1.35
 
+  typeid-js@1.1.0:
+    dependencies:
+      uuid: 10.0.0
+
   typescript@5.7.2: {}
 
   ufo@1.5.4: {}
@@ -16301,6 +16496,10 @@ snapshots:
   undici-types@5.26.5: {}
 
   undici-types@6.20.0: {}
+
+  undici@5.28.5:
+    dependencies:
+      '@fastify/busboy': 2.1.1
 
   undici@7.1.0: {}
 

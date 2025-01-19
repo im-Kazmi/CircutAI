@@ -86,13 +86,13 @@ model Circut {
   systemInstructions String        @default("You're a helpful AI assistant.")
   orgId              String
   createdBy          String
-  jsonMode           Boolean       @default(false)
-  moderation         Boolean       @default(true)
-  streamMode         Boolean       @default(true)
-  storeMessages      Boolean       @default(true)
+  // jsonMode           Boolean       @default(false) // will be in config
+  // moderation         Boolean       @default(true) // will be in config
+  // streamMode         Boolean       @default(true) // will be in config
+  // storeMessages      Boolean       @default(true) // will be in config
   org                Organization  @relation(fields: [orgId], references: [id])
   user               User          @relation(fields: [createdBy], references: [clerkId])
-  config             Json? // Store dynamic circut configurations like apiKey, model, temperature
+  config             Json?         @default("{}") // Store dynamic circut configurations like model, temperature
   version            Int           @default(1)
   status             CircutStatus  @default(DRAFT)
   createdAt          DateTime      @default(now())

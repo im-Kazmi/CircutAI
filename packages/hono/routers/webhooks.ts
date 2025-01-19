@@ -23,7 +23,7 @@ const app = new Hono()
 
     const body = await c.req.text();
 
-    const webhook = new Webhook("whsec_z1IdygrqMccoLC2maN3WoBmdC9ePkgjP");
+    const webhook = new Webhook("whsec_g/NA0VxU4xSQvYrWNeIaTRT0P6rMvr/D");
 
     let event: WebhookEvent | undefined;
 

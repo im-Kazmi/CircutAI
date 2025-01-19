@@ -1,25 +1,21 @@
 "use client";
-import { useOnboardingDialog } from "@/app/store/use-onboarding-dialog";
 import {
   RedirectToSignIn,
   useOrganizationList,
   useUser,
 } from "@repo/auth/client";
-import { Button } from "@repo/design-system/components/ui/button";
 import { SidebarProvider } from "@repo/design-system/components/ui/sidebar";
-import { type ReactNode, useEffect } from "react";
-import { GlobalSidebar } from "../components/dashboard/sidebar";
-import { OnBoardingDialog } from "../components/dialogs/onboarding-dialog";
+import { type ReactNode, useEffect, useState } from "react";
+import { data, GlobalSidebar } from "../components/dashboard/sidebar";
 import { useOrganization } from "@repo/auth/client";
 import { redirect } from "next/navigation";
-import { ShadowWrapper } from "../components/shadow-wrapper";
+
 type AppLayoutProperties = {
   readonly children: ReactNode;
 };
 
 const AppLayout = ({ children }: AppLayoutProperties) => {
   const { user, isSignedIn } = useUser();
-
   const { membership, organization, isLoaded } = useOrganization({
     memberships: true,
   });

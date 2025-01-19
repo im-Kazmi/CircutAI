@@ -15,6 +15,8 @@ const buttonVariantsOuter = cva("", {
         "w-full border-[1px] dark:border-[2px] border-black/10 dark:border-neutral-950 bg-gradient-to-b from-indigo-300/90 to-indigo-500 dark:from-indigo-200/70 dark:to-indigo-500 p-[1px] transition duration-300 ease-in-out ",
       destructive:
         "w-full border-[1px] dark:border-[2px] border-black/10 dark:border-neutral-950 bg-gradient-to-b from-red-300/90 to-red-500 dark:from-red-300/90 dark:to-red-500 p-[1px] transition duration-300 ease-in-out ",
+      circut:
+        "w-full border-[1px] dark:border-[2px] border-black/10 dark:border-neutral-950 bg-gradient-to-b from-[#CBFFBF]/90 to-red-500 dark:from-[#CBFFBF]/90 dark:to-[#CBFFBF] p-[1px] transition duration-300 ease-in-out ",
       secondary:
         "w-full border-[1px] dark:border-[2px] border-black/20 bg-white/50 dark:border-neutral-950 dark:bg-neutral-600/50 p-[1px] transition duration-300 ease-in-out ",
       minimal:
@@ -29,13 +31,13 @@ const buttonVariantsOuter = cva("", {
     },
   },
   defaultVariants: {
-    variant: "primary",
+    variant: "circut",
     size: "default",
   },
 });
 
 const innerDivVariants = cva(
-  "w-full h-full flex items-center justify-center text-muted-foreground",
+  "w-full h-full flex items-center justify-center text-neutral-900",
   {
     variants: {
       variant: {
@@ -45,6 +47,8 @@ const innerDivVariants = cva(
           "gap-2 bg-gradient-to-b from-cyan-400 to-cyan-600 text-sm text-white/90 transition duration-300 ease-in-out hover:bg-gradient-to-b hover:from-indigo-400/70 hover:to-indigo-600/70 dark:hover:from-indigo-400/70 dark:hover:to-indigo-600/70 active:bg-gradient-to-b active:from-indigo-400/80 active:to-indigo-600/80 dark:active:from-indigo-400 dark:active:to-indigo-600",
         destructive:
           "gap-2 bg-gradient-to-b from-red-400/60 to-red-500/60 text-sm text-white/90 transition duration-300 ease-in-out hover:bg-gradient-to-b hover:from-red-400/70 hover:to-red-600/70 dark:hover:from-red-400/70 dark:hover:to-red-500/80 active:bg-gradient-to-b active:from-red-400/80 active:to-red-600/80 dark:active:from-red-400 dark:active:to-red-500",
+        circut:
+          "gap-2 bg-gradient-to-b from-[#CBFFBF] to-[#CBFFBF]60 text-sm text-white/90 transition duration-300 ease-in-out hover:bg-gradient-to-b hover:from-[#CBFFBF]/70 hover:to-[#CBFFBF]70 dark:hover:from-[#CBFFBF]/70 dark:hover:to-[#CBFFBF]/80 active:bg-gradient-to-b active:from-[#CBFFBF]/80 active:to-[#CBFFBF]/80 dark:active:from-[#CBFFBF] dark:active:to-[#CBFFBF]",
         secondary:
           "bg-gradient-to-b from-neutral-100/80 to-neutral-200/50 dark:from-neutral-800 dark:to-neutral-700/50 text-sm transition duration-300 ease-in-out hover:bg-gradient-to-b hover:from-neutral-200/40 hover:to-neutral-300/60 dark:hover:from-neutral-700 dark:hover:to-neutral-700/60 active:bg-gradient-to-b active:from-neutral-200/60 active:to-neutral-300/70 dark:active:from-neutral-800 dark:active:to-neutral-700",
         minimal:
@@ -59,7 +63,7 @@ const innerDivVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "primary",
+      variant: "circut",
       size: "default",
     },
   },
@@ -82,7 +86,7 @@ const TextureButton = React.forwardRef<HTMLButtonElement, UnifiedButtonProps>(
   (
     {
       children,
-      variant = "secondary",
+      variant = "circut",
       size = "default",
       asChild = false,
       className,
