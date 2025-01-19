@@ -20,11 +20,9 @@ export const ModelConfigSheet = () => {
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="lg:min-w-[600px]">
         <SheetHeader>
-          <SheetTitle>Are you absolutely sure?</SheetTitle>
-          <SheetDescription>
-            <ModelConfigForm />
-          </SheetDescription>
+          <SheetTitle>Configure LLM model.</SheetTitle>
         </SheetHeader>
+        <ModelConfigForm />
       </SheetContent>
     </Sheet>
   );

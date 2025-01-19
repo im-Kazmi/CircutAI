@@ -1,6 +1,6 @@
 "use client";
 
-import { HeaderActions } from "./_components/header-actions";
+import { Header } from "./_components/header";
 import { EnvSelector } from "./_components/env-selector";
 import { PromptEditor } from "./_components/prompt-editor";
 import { SettingsPanel } from "./_components/settings-panel";
@@ -67,7 +67,7 @@ export const ClientPage = ({ id }: Props) => {
         <FormProvider {...methods}>
           <ModelConfigSheet />
           <div className="flex-1">
-            <HeaderActions circut={data} />
+            <Header />
             <EnvSelector />
             <div className="container mx-auto max-w-7xl">
               <div className="grid grid-cols-3 gap-8 p-8">

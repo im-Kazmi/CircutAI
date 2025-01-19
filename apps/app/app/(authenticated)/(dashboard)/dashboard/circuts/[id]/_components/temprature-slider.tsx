@@ -4,7 +4,7 @@ import { Slider } from "@repo/design-system/components/ui/slider";
 import { Heater } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { CircutUpdateInput } from "../client-page";
-
+import { Badge } from "@repo/design-system/components/ui/badge";
 export const TempratureSlider = () => {
   const max = 1;
   const { control, watch, setValue, getValues } =
@@ -21,7 +21,7 @@ export const TempratureSlider = () => {
           <Heater size={20} /> <Label>Temprature</Label>
         </div>
 
-        <span>{temprature}</span>
+        <Badge>{temprature}</Badge>
       </div>
       <div>
         <Slider
