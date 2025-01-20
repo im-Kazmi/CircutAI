@@ -12,6 +12,7 @@ import {
   TabsTrigger,
 } from "@repo/design-system/components/ui/tabs";
 import { PROVIDERS } from "@/app/utils/constants";
+import { ProviderRow } from "./provider-row";
 
 export function Keysets() {
   return (

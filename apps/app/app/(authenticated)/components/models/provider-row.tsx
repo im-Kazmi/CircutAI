@@ -3,6 +3,7 @@ import { LLMType } from "@repo/database";
 import { useCheckApiKey } from "@repo/features/apiKey/queries";
 import { PROVIDERS } from "@/app/utils/constants";
 import { ReactNode } from "react";
+import { useModelKeyDialog } from "@/app/store/use-model-key-dialog";
 
 export function ProviderRow({
   name,
@@ -15,8 +16,12 @@ export function ProviderRow({
 }) {
   const { data, isLoading } = useCheckApiKey(type);
 
+  const { onOpen } = useModelKeyDialog();
   return (
-    <div className="flex items-center justify-between p-4 hover:bg-accent rounded-lg">
+    <div
+      onClick={() => onOpen(type)}
+      className="flex items-center justify-between cursor-pointer p-4 hover:bg-accent rounded-lg"
+    >
       <div className="flex items-center gap-3">
         {icon}
         <span className="font-medium">{name}</span>
@@ -29,7 +34,7 @@ export function ProviderRow({
         </Badge>
       ) : (
         // <ApiKeyDialog type={type} providerName={name} />
-        <div></div>
+        <div>no key</div>
       )}
     </div>
   );

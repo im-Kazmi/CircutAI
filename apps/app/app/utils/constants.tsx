@@ -19,10 +19,10 @@ export const iconMap: any = {
 
 export const PROVIDERS = [
   { name: "OpenAI", type: "OPENAI", icon: <OpenAIIcon /> },
-  { name: "Together", type: "TOGETHER", icon: <OpenAIIcon />},
+  { name: "Together", type: "TOGETHER", icon: <OpenAIIcon /> },
   { name: "Anthropic", type: "ANTHROPIC", icon: <AnthropicIcon /> },
-  { name: "Google", type: "GOOGLE", icon:  <GoogleIcon />},
-  { name: "Groq", type: "GROQ", icon:  <OpenAIIcon />,
-  { name: "Cohere", type: "COHERE", icon: <MistralIcon />},
-  { name: "Fireworks AI", type: "FIREWORKS", icon:  <OpenAIIcon />},
+  { name: "Google", type: "GOOGLE", icon: <GoogleIcon /> },
+  { name: "Groq", type: "GROQ", icon: <OpenAIIcon /> },
+  { name: "Cohere", type: "COHERE", icon: <MistralIcon /> },
+  { name: "Fireworks AI", type: "FIREWORKS", icon: <OpenAIIcon /> },
 ] as const;

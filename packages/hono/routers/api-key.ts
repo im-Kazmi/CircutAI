@@ -2,7 +2,6 @@ import { sortingAndPaginationSchema } from "../schemas/sorting";
 import { apiKeyHonoService } from "../services";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { type APIKey, LLMType } from "@repo/database";
 import { Hono } from "hono";
 import { z } from "zod";
 
@@ -56,7 +55,7 @@ const app = new Hono()
   })
   .get(
     "/:type",
-    zValidator("param", z.object({ type: z.nativeEnum(LLMType) })),
+    zValidator("param", z.object({ type: z.string() })),
     async (c) => {
       const { type } = c.req.valid("param");
       const apiKeyService = c.var.apiKeyService;
@@ -94,7 +93,7 @@ const app = new Hono()
 
     const apiKey = await apiKeyService.createAPIKey(auth.orgId, values);
 
-    return c.json('key created' 201);
+    return c.json("key created", 201);
   })
   .delete(
     "/:id",
