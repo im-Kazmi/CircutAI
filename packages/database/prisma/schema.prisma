@@ -222,6 +222,7 @@ model APIKey {
   org       Organization @relation(fields: [orgId], references: [id])
   type      LLMType
   key       String       @unique
+  iv        String       @default("")
   createdAt DateTime     @default(now())
   revokedAt DateTime?
 }

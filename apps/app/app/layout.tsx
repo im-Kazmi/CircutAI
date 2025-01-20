@@ -4,7 +4,6 @@ import { fonts } from "@repo/design-system/lib/fonts";
 import { QueryProvider } from "@repo/react-query/providers/query-provider";
 import type { ReactNode } from "react";
 import DialogProvider from "./providers/dialog-provider";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { SheetProvider } from "./providers/sheet-provider";
 
 type RootLayoutProperties = {
@@ -18,7 +17,7 @@ const RootLayout = ({ children }: RootLayoutProperties) => (
         <DesignSystemProvider>
           <DialogProvider />
           <SheetProvider />
-          <NuqsAdapter>{children}</NuqsAdapter>
+          {children}
         </DesignSystemProvider>
       </body>
     </QueryProvider>

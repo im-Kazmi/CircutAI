@@ -6,6 +6,7 @@ import { UserService } from "./user";
 import { WebhookService } from "./webhooks";
 import { MemoryService } from "./memory";
 import { DocumentService } from "./document";
+import { APIKeyService } from "./api-key";
 import { ToolService } from "./tool";
 
 export const userService = new UserService(prisma);
@@ -15,6 +16,7 @@ export const memoryService = new MemoryService(prisma);
 export const webhookService = new WebhookService(prisma);
 export const documentService = new DocumentService(prisma);
 export const toolService = new ToolService(prisma);
+export const apiKeylService = new APIKeyService(prisma);
 
 export const userHonoService = new Dependency(
   (c, prisma, auth) => new UserService(prisma),
@@ -42,4 +44,8 @@ export const orgHonoService = new Dependency(
 
 export const webhookHonoService = new Dependency(
   (c, prisma, auth) => new WebhookService(prisma),
+);
+
+export const apiKeyHonoService = new Dependency(
+  (c, prisma, auth) => new APIKeyService(prisma),
 );

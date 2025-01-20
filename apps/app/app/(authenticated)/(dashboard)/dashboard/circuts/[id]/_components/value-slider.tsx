@@ -41,7 +41,7 @@ export const ValueSlider = ({
         {tooltipDescription && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" className="h-8 w-8">
+              <Button variant="outline" size="icon" className="h-4 w-4">
                 <InfoIcon className="h-3 w-3" />
               </Button>
             </TooltipTrigger>

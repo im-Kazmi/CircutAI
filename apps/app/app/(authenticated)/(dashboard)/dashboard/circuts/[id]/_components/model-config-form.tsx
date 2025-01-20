@@ -3,7 +3,14 @@ import { ModelsSelect } from "./models-select";
 import { useFormContext } from "react-hook-form";
 import { CircutUpdateInput } from "../client-page";
 import { ValueSlider } from "./value-slider";
-import { Torus, AlarmClockOff } from "lucide-react";
+import {
+  Torus,
+  AlarmClockOff,
+  Maximize2,
+  Compass,
+  Repeat,
+  PieChart,
+} from "lucide-react";
 export const ModelConfigForm = () => {
   const { control, watch, setValue, getValues } =
     useFormContext<CircutUpdateInput>();
@@ -30,9 +37,8 @@ export const ModelConfigForm = () => {
           minValue={50}
           step={1}
           onValueChange={(v) => onChangeValue("max_tokens", v)}
-          Icon=<Torus />
-          tooltipDescription="Tokens can be thought of as pieces of words.
-          Maximum number of tokens in the response message returned."
+          Icon=<Maximize2 size={15} />
+          tooltipDescription="The maximum number of words the model can generate in its response."
         />
         {/* i would have mapped through a list but i like it this way */}
         <ValueSlider
@@ -42,8 +48,8 @@ export const ModelConfigForm = () => {
           minValue={-2}
           step={0.1}
           onValueChange={(v) => onChangeValue("presence_penalty", v)}
-          Icon=<AlarmClockOff />
-          tooltipDescription="Presence Penalty: Penalizes a word on its occurrence in the input text. Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics."
+          Icon=<Compass size={15} />
+          tooltipDescription="This setting helps the model talk about new topics instead of repeating what it already said."
         />
         {/* i would have mapped through a list but i like it this way */}
         <ValueSlider
@@ -53,8 +59,8 @@ export const ModelConfigForm = () => {
           minValue={-2}
           step={0.1}
           onValueChange={(v) => onChangeValue("frequency_penalty", v)}
-          Icon=<AlarmClockOff />
-          tooltipDescription="Frequency Penalty: Penalizes a word on how frequently it appears in the training data. Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim."
+          Icon=<Repeat size={15} />
+          tooltipDescription="This setting helps reduce how often the model repeats the same words."
         />
         {/* i would have mapped through a list but i like it this way */}
         <ValueSlider
@@ -64,10 +70,8 @@ export const ModelConfigForm = () => {
           minValue={0}
           step={0.1}
           onValueChange={(v) => onChangeValue("top_p", v)}
-          Icon=<AlarmClockOff />
-          tooltipDescription="An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered.
-
-          OpenAI: Recommends altering either `temperature` or `top_p` but not both."
+          Icon=<PieChart size={15} />
+          tooltipDescription="This controls how many different options the model considers when picking words. A smaller value means fewer options."
         />
       </div>
     </div>

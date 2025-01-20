@@ -17,6 +17,7 @@
     "@prisma/client": "6.0.1",
     "@repo/auth": "workspace:*",
     "@repo/config": "workspace:*",
+    "@repo/common": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/design-system": "workspace:*",
     "@repo/env": "workspace:*",

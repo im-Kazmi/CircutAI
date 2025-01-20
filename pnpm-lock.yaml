@@ -38,6 +38,9 @@ importers:
       '@repo/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@repo/common':
+        specifier: workspace:*
+        version: link:../../packages/common
       '@repo/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -270,6 +273,19 @@ importers:
       '@types/react-dom':
         specifier: ^19.0.1
         version: 19.0.1
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+
+  packages/common:
+    dependencies:
+      react:
+        specifier: ^19.0.0
+        version: 19.0.0
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
