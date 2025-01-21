@@ -25,34 +25,6 @@ const createAPIKeySchema = z.object({
 const app = new Hono()
   .use(clerkMiddleware())
   .use(apiKeyHonoService.middleware("apiKeyService"))
-  .get("/list", zValidator("query", sortingAndPaginationSchema), async (c) => {
-    const auth = getAuth(c);
-
-    if (!auth?.userId || !auth?.orgId) {
-      return c.json(
-        {
-          message: "You are not logged in or not part of an organization.",
-        },
-        401,
-      );
-    }
-
-    const apiKeyService = c.var.apiKeyService;
-
-    const { page, sortBy, pageSize, sortOrder } = c.req.valid("query");
-
-    const apiKeys = await apiKeyService.list(
-      {
-        page: page ? Number.parseInt(page, 10) : 1,
-        pageSize: pageSize ? Number.parseInt(pageSize, 10) : 10,
-        sortBy: sortBy ? (sortBy as keyof APIKey) : "createdAt",
-        sortOrder: sortOrder ? sortOrder : "desc",
-      },
-      auth.orgId,
-    );
-
-    return c.json(apiKeys, 200);
-  })
   .get(
     "/:type",
     zValidator("param", z.object({ type: z.string() })),

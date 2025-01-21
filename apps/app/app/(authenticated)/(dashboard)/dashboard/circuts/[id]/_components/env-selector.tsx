@@ -13,8 +13,11 @@ import {
   TooltipTrigger,
 } from "@repo/design-system/components/ui/tooltip";
 import { ModelTrigger } from "./model-trigger";
+import { useModelKeySheet } from "@/app/store/use-model-key-sheet";
 
 export function EnvSelector() {
+  const { onOpen } = useModelKeySheet();
+
   return (
     <div className="flex items-center gap-3 p-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <Select defaultValue="production">
@@ -31,7 +34,12 @@ export function EnvSelector() {
 
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button variant="outline" size="icon" className="h-8 w-8">
+            <Button
+              onClick={onOpen}
+              variant="outline"
+              size="icon"
+              className="h-8 w-8"
+            >
               <Key className="h-4 w-4" />
             </Button>
           </TooltipTrigger>

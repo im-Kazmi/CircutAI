@@ -37,6 +37,7 @@ export class APIKeyService extends BaseService {
           type: values.type,
           key: encryptedKey,
           iv,
+          tag,
           org: {
             connect: {
               id: orgId,
@@ -79,7 +80,7 @@ export class APIKeyService extends BaseService {
         const decryptedKey = decryptApiKey({
           encryptedKey: apiKey.key,
           iv: apiKey.iv,
-          tag: apiKey.iv,
+          tag: apiKey.tag,
         });
         return { ...apiKey, key: decryptedKey };
       }
@@ -100,7 +101,7 @@ export class APIKeyService extends BaseService {
         const decryptedKey = decryptApiKey({
           encryptedKey: apiKey.key,
           iv: apiKey.iv,
-          tag: apiKey.iv,
+          tag: apiKey.tag,
         });
         return { ...apiKey, key: decryptedKey };
       }

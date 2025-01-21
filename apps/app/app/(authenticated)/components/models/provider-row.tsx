@@ -29,11 +29,8 @@ export function ProviderRow({
       {isLoading ? (
         <div className="h-6 w-16 animate-pulse bg-muted rounded" />
       ) : data?.exists ? (
-        <Badge variant="secondary" className="bg-green-500/15 text-green-500">
-          LIVE
-        </Badge>
+        <Badge className="bg-green-500/15 text-green-500">LIVE</Badge>
       ) : (
-        // <ApiKeyDialog type={type} providerName={name} />
         <div>no key</div>
       )}
     </div>

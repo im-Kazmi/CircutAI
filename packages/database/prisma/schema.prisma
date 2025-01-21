@@ -223,6 +223,7 @@ model APIKey {
   type      LLMType
   key       String       @unique
   iv        String       @default("")
+  tag       String       @default("")
   createdAt DateTime     @default(now())
   revokedAt DateTime?
 }
