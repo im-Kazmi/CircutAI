@@ -74,6 +74,7 @@ const app = new Hono()
 
     return c.json("key created", 201);
   })
+  // i cant use put requests as i have coupled HOno.js inside next.js api routes. so just GET and POST
   .post(
     "/:id",
     zValidator("param", z.object({ id: z.string() })),
@@ -102,8 +103,8 @@ const app = new Hono()
       }
     },
   )
-  .delete(
-    "/:id",
+  .post(
+    "/:id/revoke",
     zValidator("param", z.object({ id: z.string() })),
     async (c) => {
       const { id } = c.req.valid("param");

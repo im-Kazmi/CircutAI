@@ -59,7 +59,24 @@ export function ModelKeyForm({
             <FormItem>
               <FormLabel>Key</FormLabel>
               <FormControl>
-                <Input placeholder="pc23*************************" {...field} />
+                <div className="flex justify-between w-full gap-x-3">
+                  <Input
+                    placeholder="pc23*************************"
+                    {...field}
+                  />
+
+                  {!!id && (
+                    <Button
+                      type="button"
+                      disabled={disabled}
+                      onClick={handleDelete}
+                      variant={"secondary"}
+                      size="icon"
+                    >
+                      <Trash className="" />
+                    </Button>
+                  )}
+                </div>
               </FormControl>
               <FormDescription>Keys will be encrypted.</FormDescription>
               <FormMessage />
@@ -75,16 +92,6 @@ export function ModelKeyForm({
           >
             {id ? "Save changes" : "Create Key"}
           </Button>
-          {!!id && (
-            <Button
-              type="button"
-              disabled={disabled}
-              onClick={handleDelete}
-              variant={"destructive"}
-            >
-              <Trash className=" size-4 mr-2 " />
-            </Button>
-          )}
         </div>
       </form>
     </Form>
