@@ -19,7 +19,13 @@ export function ProviderRow({
   const { onOpen } = useModelKeyDialog();
   return (
     <div
-      onClick={() => onOpen(type)}
+      onClick={() =>
+        onOpen({
+          id: data?.apiKey?.id!,
+          key: data?.apiKey?.key!,
+          type: type,
+        })
+      }
       className="flex items-center justify-between cursor-pointer p-4 hover:bg-accent rounded-lg"
     >
       <div className="flex items-center gap-3">

@@ -22,6 +22,10 @@ const createAPIKeySchema = z.object({
   key: z.string().min(1),
 });
 
+const updateAPIKeySchema = z.object({
+  key: z.string().min(1),
+});
+
 const app = new Hono()
   .use(clerkMiddleware())
   .use(apiKeyHonoService.middleware("apiKeyService"))
@@ -44,7 +48,10 @@ const app = new Hono()
       }
 
       const apiKey = await apiKeyService.getAPIKeyByType(auth.orgId, type);
-      return c.json(apiKey ? { exists: true } : { exists: false }, 200);
+      return c.json(
+        apiKey ? { exists: true, apiKey } : { exists: false, apiKey: null },
+        200,
+      );
     },
   )
   .post("/", zValidator("json", createAPIKeySchema), async (c) => {
@@ -87,6 +94,38 @@ const app = new Hono()
 
       const result = await apiKeyService.revokeAPIKey(auth.orgId, id);
       return c.json(result, 200);
+    },
+  )
+  .put(
+    "/:id",
+    zValidator("param", z.object({ id: z.string() })),
+    zValidator("json", updateAPIKeySchema),
+    async (c) => {
+      const { id } = c.req.valid("param");
+      const values = c.req.valid("json");
+      const apiKeyService = c.var.apiKeyService;
+
+      const auth = getAuth(c);
+
+      if (!auth?.userId || !auth?.orgId) {
+        return c.json(
+          {
+            message: "You are not logged in or not part of an organization.",
+          },
+          401,
+        );
+      }
+
+      try {
+        const updatedApiKey = await apiKeyService.updateAPIKey(
+          auth.orgId,
+          id,
+          values,
+        );
+        return c.json({ message: "API key updated successfully" }, 200);
+      } catch (error) {
+        return c.json({ message: (error as Error).message }, 400);
+      }
     },
   );
 

@@ -31,6 +31,12 @@ export class APIKeyService extends BaseService {
 
   async createAPIKey(orgId: string, values: { type: LLMType; key: string }) {
     try {
+      const exists = await this.getAPIKeyByType(orgId, values.type);
+
+      if (exists) {
+        return;
+      }
+
       const { encryptedKey, iv, tag } = encryptApiKey(values.key);
       const apiKey = await prisma.aPIKey.create({
         data: {
@@ -49,6 +55,30 @@ export class APIKeyService extends BaseService {
       return { ...apiKey, key: values.key };
     } catch (error) {
       throw new Error(`Error creating API key: ${(error as Error).message}`);
+    }
+  }
+
+  async updateAPIKey(orgId: string, id: string, values: { key: string }) {
+    try {
+      const exists = await this.getAPIKeyByIdAndOrg(id, orgId);
+
+      if (!exists) {
+        throw new Error(`API key does not exist with this id.`);
+      }
+
+      const { encryptedKey, iv, tag } = encryptApiKey(values.key);
+      const updatedApiKey = await prisma.aPIKey.update({
+        where: { id, orgId },
+        data: {
+          key: encryptedKey,
+          iv,
+          tag,
+        },
+      });
+
+      return { ...updatedApiKey, key: values.key };
+    } catch (error) {
+      throw new Error(`Error updating API key: ${(error as Error).message}`);
     }
   }
 

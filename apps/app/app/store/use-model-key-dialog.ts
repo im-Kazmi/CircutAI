@@ -1,15 +1,24 @@
 import { create } from "zustand";
 
+type Data = {
+  type: string;
+  id: string;
+  key: string;
+};
 type Types = {
   isOpen: boolean;
-  onOpen: (type: string) => void;
+  onOpen: (data: Data) => void;
   onClose: () => void;
-  type?: string;
+  data?: {
+    type: string;
+    id?: string;
+    key?: string;
+  };
 };
 
 export const useModelKeyDialog = create<Types>((set) => ({
-  type: undefined,
+  data: undefined,
   isOpen: false,
-  onOpen: (type: string) => set({ isOpen: true, type }),
-  onClose: () => set({ isOpen: false, type: undefined }),
+  onOpen: (data: Data) => set({ isOpen: true, data }),
+  onClose: () => set({ isOpen: false, data: undefined }),
 }));

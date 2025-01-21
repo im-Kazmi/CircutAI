@@ -1,5 +1,4 @@
 import { useModelKeyDialog } from "@/app/store/use-model-key-dialog";
-import { Button } from "@repo/design-system/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -9,41 +8,57 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@repo/design-system/components/ui/dialog";
-import { Input } from "@repo/design-system/components/ui/input";
-import { Label } from "@repo/design-system/components/ui/label";
 import { FormValues, ModelKeyForm } from "./model-key-form";
 import { useCreateApiKey } from "@repo/features/apiKey/mutations";
+import { useUpdateApiKey } from "@repo/features/apiKey/mutations";
 
 export function ModelKeyDialog() {
-  const { type, onClose, isOpen } = useModelKeyDialog();
-  const mutation = useCreateApiKey();
+  const { data: modelData, onClose, isOpen } = useModelKeyDialog();
+  const createMutation = useCreateApiKey();
+  const updateMutation = useUpdateApiKey(modelData?.id!, modelData?.type!);
 
   function onSubmit(data: FormValues) {
-    mutation.mutate(
-      {
-        key: data.key,
-        type: type as any,
-      },
-      {
-        onSuccess: (data, vars) => {},
-        onError: () => {},
-        onSettled: () => {},
-      },
-    );
+    if (modelData && modelData.id) {
+      updateMutation.mutate(
+        {
+          key: data.key,
+        },
+        {
+          onSuccess: (data, vars) => {},
+          onError: () => {},
+          onSettled: () => {},
+        },
+      );
+    } else {
+      createMutation.mutate(
+        {
+          key: data.key,
+          type: modelData?.type as any,
+        },
+        {
+          onSuccess: (data, vars) => {},
+          onError: () => {},
+          onSettled: () => {},
+        },
+      );
+    }
   }
+
+  const isLoading = createMutation.isPending || updateMutation.isPending;
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create {type} Key</DialogTitle>
+          <DialogTitle>Create {modelData?.type} Key</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <ModelKeyForm
           onSubmit={onSubmit}
           defaultValues={{
-            key: "",
+            key: modelData?.key ? modelData.key : "",
           }}
-          disabled={mutation.isPending}
+          disabled={isLoading}
+          id={modelData?.id ? modelData.id : undefined}
         />
       </DialogContent>
     </Dialog>
