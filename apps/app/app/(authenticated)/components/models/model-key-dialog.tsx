@@ -24,7 +24,9 @@ export function ModelKeyDialog() {
           key: data.key,
         },
         {
-          onSuccess: (data, vars) => {},
+          onSuccess: (data, vars) => {
+            onClose();
+          },
           onError: () => {},
           onSettled: () => {},
         },
@@ -36,7 +38,9 @@ export function ModelKeyDialog() {
           type: modelData?.type as any,
         },
         {
-          onSuccess: (data, vars) => {},
+          onSuccess: (data, vars) => {
+            onClose();
+          },
           onError: () => {},
           onSettled: () => {},
         },

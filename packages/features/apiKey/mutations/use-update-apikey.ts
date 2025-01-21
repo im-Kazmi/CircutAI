@@ -3,11 +3,11 @@ import type { InferRequestType, InferResponseType } from "@repo/hono";
 import { useMutation, useQueryClient } from "@repo/react-query";
 
 type ResponseType = InferResponseType<
-  (typeof client.api)["api-key"][":id"]["$put"],
+  (typeof client.api)["api-key"][":id"]["$post"],
   200
 >;
 type RequestType = InferRequestType<
-  (typeof client.api)["api-key"][":id"]["$put"]
+  (typeof client.api)["api-key"][":id"]["$post"]
 >["json"];
 
 export const useUpdateApiKey = (id: string, type: string) => {
@@ -15,7 +15,7 @@ export const useUpdateApiKey = (id: string, type: string) => {
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async (json) => {
-      const res = await client.api["api-key"][":id"]["$put"]({
+      const res = await client.api["api-key"][":id"]["$post"]({
         json: json,
         param: {
           id: id,
@@ -30,7 +30,7 @@ export const useUpdateApiKey = (id: string, type: string) => {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["api-keys", { type }] });
+      queryClient.invalidateQueries({ queryKey: ["api-keys", type] });
     },
     onError: () => {},
   });

@@ -74,29 +74,7 @@ const app = new Hono()
 
     return c.json("key created", 201);
   })
-  .delete(
-    "/:id",
-    zValidator("param", z.object({ id: z.string() })),
-    async (c) => {
-      const { id } = c.req.valid("param");
-      const apiKeyService = c.var.apiKeyService;
-
-      const auth = getAuth(c);
-
-      if (!auth?.userId || !auth?.orgId) {
-        return c.json(
-          {
-            message: "You are not logged in or not part of an organization.",
-          },
-          401,
-        );
-      }
-
-      const result = await apiKeyService.revokeAPIKey(auth.orgId, id);
-      return c.json(result, 200);
-    },
-  )
-  .put(
+  .post(
     "/:id",
     zValidator("param", z.object({ id: z.string() })),
     zValidator("json", updateAPIKeySchema),
@@ -117,15 +95,33 @@ const app = new Hono()
       }
 
       try {
-        const updatedApiKey = await apiKeyService.updateAPIKey(
-          auth.orgId,
-          id,
-          values,
-        );
+        await apiKeyService.updateAPIKey(auth.orgId, id, values);
         return c.json({ message: "API key updated successfully" }, 200);
       } catch (error) {
         return c.json({ message: (error as Error).message }, 400);
       }
+    },
+  )
+  .delete(
+    "/:id",
+    zValidator("param", z.object({ id: z.string() })),
+    async (c) => {
+      const { id } = c.req.valid("param");
+      const apiKeyService = c.var.apiKeyService;
+
+      const auth = getAuth(c);
+
+      if (!auth?.userId || !auth?.orgId) {
+        return c.json(
+          {
+            message: "You are not logged in or not part of an organization.",
+          },
+          401,
+        );
+      }
+
+      const result = await apiKeyService.revokeAPIKey(auth.orgId, id);
+      return c.json(result, 200);
     },
   );
 
